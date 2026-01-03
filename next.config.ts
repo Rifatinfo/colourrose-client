@@ -22,7 +22,13 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "https",
-        hostname: "cdn-icons-png.flaticon.com",
+        hostname: "img.youtube.com",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "cdn.magicpatterns.com",
+        pathname: "/**",
       },
     ],
   },

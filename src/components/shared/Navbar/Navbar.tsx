@@ -11,7 +11,6 @@ import { menuData } from './menu-item'
 import WhiteLogo from '../Logo/WhiteLogo'
 
 export function Navbar() {
-  const [isScrolled, setIsScrolled] = useState(false)
   const [activeCategory, setActiveCategory] = useState<string | null>(null)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [expandedMobileCategory, setExpandedMobileCategory] = useState<
@@ -50,24 +49,6 @@ export function Navbar() {
     }
   }, [isMobileMenuOpen])
 
-  // useEffect(() => {
-  //   const handleScroll = () => {
-  //     setIsScrolled(window.scrollY > 50)
-  //   }
-  //   window.addEventListener('scroll', handleScroll)
-  //   return () => window.removeEventListener('scroll', handleScroll)
-  // }, [])
-  // Prevent body scroll when mobile menu is open
-  // useEffect(() => {
-  //   if (isMobileMenuOpen) {
-  //     document.body.style.overflow = 'hidden'
-  //   } else {
-  //     document.body.style.overflow = 'unset'
-  //   }
-  //   return () => {
-  //     document.body.style.overflow = 'unset'
-  //   }
-  // }, [isMobileMenuOpen])
 
   const navItems = ['WOMEN', 'MEN', 'KIDS', 'COLLECTION']
 
@@ -85,7 +66,7 @@ export function Navbar() {
         onMouseLeave={() => setActiveCategory(null)}
       >
 
-        <div className="max-w-7xl mx-auto px-6 text-black">
+        <div className="max-w-7xl mx-auto px-6 md:px-0 text-black">
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
             <WhiteLogo />

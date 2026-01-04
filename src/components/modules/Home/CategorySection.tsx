@@ -8,21 +8,21 @@ const categories = [
     id: 'men',
     title: 'MEN',
     image:
-      'https://cdn.magicpatterns.com/uploads/c3ZWP99BmDtxDVPC4ximJy/image.png',
+      'https://res.cloudinary.com/dgp5rqeqh/image/upload/v1767438821/WhatsApp_Image_2026-01-03_at_5.09.34_PM_gdbj0c.jpg',
     link: '#',
   },
   {
     id: 'women',
     title: 'WOMEN',
     image:
-      'https://cdn.magicpatterns.com/uploads/632fbkwpepgm2bRnJQjkwt/image.png',
+      'https://res.cloudinary.com/dgp5rqeqh/image/upload/v1767438820/WhatsApp_Image_2026-01-03_at_5.09.34_PM_1_fg0dlm.jpg',
     link: '#',
   },
   {
     id: 'kids',
     title: 'KIDS',
     image:
-      'https://cdn.magicpatterns.com/uploads/1UPPFPky7GHr95ovyiNr1o/image.png',
+      'https://res.cloudinary.com/dgp5rqeqh/image/upload/v1767439371/WhatsApp_Image_2026-01-03_at_1.30.28_PM_wrpegp.jpg',
     link: '#',
   },
 ]

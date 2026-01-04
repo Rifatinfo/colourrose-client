@@ -8,7 +8,7 @@ export const products = [
         name: 'The Quilted Patchwork Jacket',
         price: '$398.00',
         image:
-            'https://cdn.magicpatterns.com/uploads/64ZrYudT1YWtvFcXmHbcMd/image.png',
+            'https://colourrose.shop/wp-content/uploads/2024/03/1-scaled.jpg',
         category: 'Limited Edition',
         badge: 'Best Seller',
         rating: 4.9,
@@ -20,7 +20,7 @@ export const products = [
         name: 'Oversized Wool Coat',
         price: '$298.00',
         image:
-            'https://cdn.magicpatterns.com/uploads/c3ZWP99BmDtxDVPC4ximJy/image.png',
+            'https://colourrose.shop/wp-content/uploads/2024/03/P-1131-01.jpg',
         category: 'Outerwear',
         badge: 'New Arrival',
         rating: 4.7,
@@ -32,7 +32,7 @@ export const products = [
         name: 'Textured Knit Sweater',
         price: '$145.00',
         image:
-            'https://cdn.magicpatterns.com/uploads/632fbkwpepgm2bRnJQjkwt/image.png',
+            'https://colourrose.shop/wp-content/uploads/2024/12/1.jpg',
         category: 'Knitwear',
         rating: 4.8,
         colors: ['#C45D48', '#000000', '#F57C00', '#FFD700'],

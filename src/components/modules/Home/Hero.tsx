@@ -50,7 +50,7 @@ export function Hero() {
                 }
 
                 {/* Dark overlay */}
-                <div className="absolute inset-0 bg-black/50" />
+                <div className="absolute inset-0 bg-black/40" />
             </div>
 
 

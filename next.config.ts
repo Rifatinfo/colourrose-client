@@ -30,6 +30,11 @@ const nextConfig: NextConfig = {
         hostname: "cdn.magicpatterns.com",
         pathname: "/**",
       },
+      {
+        protocol: "https",
+        hostname: "colourrose.shop",
+        pathname: "/**",
+      },
     ],
   },
 };

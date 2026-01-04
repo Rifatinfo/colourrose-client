@@ -1,43 +1,56 @@
 "use client";
 
-// import video from "../../../assets/video1.mp4"; // Replace with actual path
 
-import { useEffect, useRef } from 'react'
-import { motion } from 'framer-motion'
+import { useEffect, useRef, useState } from 'react';
+import { motion } from 'framer-motion';
+import Image from 'next/image';
 export function Hero() {
-    const videoRef = useRef<HTMLVideoElement>(null)
+    const videoRef = useRef<HTMLVideoElement>(null);
+    const [showVideo, setShowVideo] = useState(false);
+
     useEffect(() => {
+        const timeout = setTimeout(() => setShowVideo(true), 1200);
+        return () => clearTimeout(timeout);
+    }, []);
+    useEffect(() => {
+        if (!showVideo) return
+
         const video = videoRef.current
-        if (video) {
-            // Ensure video plays and loops
-            video.play().catch((error) => {
-                console.log('Video autoplay prevented:', error)
-            })
-            // Add event listener to ensure continuous loop
-            const handleEnded = () => {
-                video.currentTime = 0
-                video.play()
-            }
-            video.addEventListener('ended', handleEnded)
-            return () => {
-                video.removeEventListener('ended', handleEnded)
-            }
-        }
-    }, [])
+        if (!video) return
+
+        video.play().catch((err) => {
+            console.log("Autoplay blocked:", err)
+        })
+    }, [showVideo])
     return (
         <section className="relative w-full h-[150svh] overflow-hidden">
             {/* YouTube Background */}
             <div className="absolute inset-0 overflow-hidden bg-soft-black">
-                <video
-                    ref={videoRef}
+                <Image
+                    fill
+                    src="https://img.youtube.com/vi/mgOmjlEp1Ks/maxresdefault.jpg"
                     className="absolute w-full h-full object-cover"
-                    muted
-                    loop
-                >
-                    <source src="/assets/arong.mp4" type="video/mp4" />
-                </video>
+                    alt=""
+                />
+                {/* Background video */}
+                {
+                    showVideo && (
+                        <video
+                            ref={videoRef}
+                            className="absolute w-full h-full object-cover"
+                            muted
+                            loop
+                            playsInline
+                            preload="none"
+                        >
+                            <source src="/assets/arong.mp4" type="video/mp4" />
+                            Your browser does not support the video tag.
+                        </video>
+                    )
+                }
+
                 {/* Dark overlay */}
-                <div className="absolute inset-0 bg-black/30" />
+                <div className="absolute inset-0 bg-black/40" />
             </div>
 
 

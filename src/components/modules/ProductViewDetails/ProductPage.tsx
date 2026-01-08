@@ -7,6 +7,7 @@ import { ProductInfo } from './ProductInfo';
 import ProductTabs from './ProductTabs';
 import RelatedProducts from '@/components/shared/RelatedProduct/RelatedProducts';
 import { CartDrawer } from './CartDrawer';
+import Breadcrumb from '@/components/shared/Breadcrumb/Breadcrumb';
 
 type CartMode = "SHOP" | "PICKUP";
 
@@ -29,19 +30,12 @@ const ProductPage = () => {
 
     return (
         <div className="min-h-screen bg-white font-sans text-gray-900">
+            {/* Breadcrumb */}
+            <div className='bg-gray-200'>
+                <Breadcrumb />
+            </div>
             <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-                {/* Breadcrumb */}
-                <nav className="flex items-center text-xs text-gray-500 mb-8 overflow-x-auto whitespace-nowrap pb-2">
-                    <a href="#" className="hover:text-gray-900 transition-colors">
-                        Home
-                    </a>
-                    <ChevronRight className="h-3 w-3 mx-2 flex-shrink-0" />
-                    <a href="#" className="hover:text-gray-900 transition-colors">
-                        EID-25
-                    </a>
-                    <ChevronRight className="h-3 w-3 mx-2 flex-shrink-0" />
-                    <span className="text-gray-900 font-medium">EMBROIDERY PANJABI</span>
-                </nav>
+
 
                 {/* Product Layout */}
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16">

@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ShoppingBag, Heart, Star, Plus } from 'lucide-react'
+import { ShoppingBag, Heart } from 'lucide-react'
 import Image from 'next/image'
 
 
@@ -42,7 +42,9 @@ export function ProductCard({
             >
                 {/* Image Container */}
                 <div
-                    className={`relative  overflow-hidden bg-neutral-100 ${isLarge ? 'h-[700px] md:h-full' : 'aspect-[4/5] md:aspect-square'
+                    className={`relative overflow-hidden bg-neutral-100 ${isLarge
+                            ? 'aspect-[4/5] md:h-[650px] lg:h-[800px]'
+                            : 'aspect-[4/5] md:h-[520px] lg:h-[600px]'
                         }`}
                 >
                     <Image
@@ -142,21 +144,21 @@ export function ProductCard({
                 {/* Product Info */}
                 {!isHovered && (
                     <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/70 to-transparent p-4 flex flex-col gap-1 shadow-md pointer-events-none">
-                    <div className="flex justify-between items-start">
-                        <div>
-                            <p className="text-xs font-medium uppercase tracking-widest text-white mb-1">
-                                {product.category}
-                            </p>
-                            <h3 className="text-lg font-medium leading-tight text-white">
-                                {product.name}
-                            </h3>
+                        <div className="flex justify-between items-start">
+                            <div>
+                                <p className="text-xs font-medium uppercase tracking-widest text-white mb-1">
+                                    {product.category}
+                                </p>
+                                <h3 className="text-lg font-medium leading-tight text-white">
+                                    {product.name}
+                                </h3>
+                            </div>
+                        </div>
+
+                        <div className="flex justify-between items-center mt-2">
+                            <span className="text-base font-semibold text-white">{product.price}</span>
                         </div>
                     </div>
-
-                    <div className="flex justify-between items-center mt-2">
-                        <span className="text-base font-semibold text-white">{product.price}</span>
-                    </div>
-                </div>
                 )}
 
 

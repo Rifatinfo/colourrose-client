@@ -1,22 +1,22 @@
-import { products } from "@/lib/products";
+// import { products } from "@/lib/products";
 
-const SubcategoryPage = ({params} : {params: {category: string, subCategory: string}}) => {
-
-   const filtered = products.filter(
-    (p) =>
-      p.category === params.category &&
-      p.subCategory === params.subCategory
-  );
+const SubcategoryPage = () => {
+// {params} : {params: {category: string, subCategory: string}}
+//    const filtered = products.filter(
+//     (p) =>
+//       p.category === params.category &&
+//       p.subCategory === params.subCategory
+//   );
 
   return (
     <div>
-      <h1>
+      {/* <h1>
         {params.category} → {params.subCategory}
-      </h1>
+      </h1> */}
 
-      {filtered.map((p) => (
+      {/* {filtered.map((p) => (
         <p key={p.id}>{p.name}</p>
-      ))}
+      ))} */}
     </div>
   );
 }

@@ -2,6 +2,7 @@ import ProductPage from "@/components/modules/ProductViewDetails/ProductPage";
 // import { products } from "@/lib/products";
 
 const page = () => {
+    
     // { params }: { params: { category: string, subCategory: string, slug: string } }
     // const product = products.find(
     //     (p) =>

@@ -17,11 +17,13 @@ export type MenuCategory = {
 interface MegaMenuProps {
   isOpen: boolean
   activeCategory: string | null
-  onClose: () => void
+  onClose: () => void,
+  isHome: boolean
 }
 
-export function MegaMenu({ isOpen, activeCategory, onClose }: MegaMenuProps) {
-  const data = activeCategory ? menuData[activeCategory] : null
+export function MegaMenu({ isOpen, activeCategory, onClose , isHome }: MegaMenuProps) {
+  const data = activeCategory ? menuData[activeCategory] : null;
+ 
   return (
     <AnimatePresence>
       {isOpen && data && (
@@ -64,7 +66,7 @@ export function MegaMenu({ isOpen, activeCategory, onClose }: MegaMenuProps) {
                         delay: 0.1 + colIndex * 0.1,
                         duration: 0.4,
                       }}
-                      className="text-sm uppercase tracking-widest font-semibold text-gold"
+                      className="text-sm uppercase tracking-widest  font-semibold text-white"
                     >
                       {column.title}
                     </motion.h3>
@@ -87,7 +89,7 @@ export function MegaMenu({ isOpen, activeCategory, onClose }: MegaMenuProps) {
                         >
                           <a
                             href="#"
-                            className="group relative inline-block text-soft-black hover:text-black transition-colors duration-300"
+                            className="group relative inline-block text-white  transition-colors duration-300"
                           >
                             <span className="relative z-10">{item}</span>
                             <span className="absolute left-0 bottom-0 w-0 h-[1px] bg-gold transition-all duration-300 group-hover:w-full" />

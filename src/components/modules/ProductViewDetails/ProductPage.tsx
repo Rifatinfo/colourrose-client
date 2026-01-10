@@ -1,7 +1,6 @@
 'use client';
 import { useState } from 'react'
 
-import { ChevronRight } from 'lucide-react'
 import ProductImageGallery from './ProductImageGallery';
 import { ProductInfo } from './ProductInfo';
 import ProductTabs from './ProductTabs';
@@ -30,7 +29,7 @@ const ProductPage = () => {
 
     return (
         <div className="min-h-screen bg-white font-sans text-gray-900">
-            {/* Breadcrumb */}
+            {/*================ Breadcrumb ================*/}
             <div className='bg-gray-200'>
                 <Breadcrumb />
             </div>

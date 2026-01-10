@@ -1,28 +1,47 @@
-"use client"
+"use client";
 
-import { useEffect, useState } from 'react'
-import { Search, User, Menu, X, ChevronDown, ShoppingCart, Heart } from 'lucide-react'
-import { motion, useScroll, useTransform, AnimatePresence, useMotionValue, useMotionValueEvent } from 'framer-motion'
+import { useEffect, useState } from "react";
+import {
+  Search,
+  User,
+  Menu,
+  X,
+  ChevronDown,
+  ShoppingCart,
+  Heart,
+} from "lucide-react";
+import {
+  motion,
+  useScroll,
+  useTransform,
+  AnimatePresence,
+  useMotionValue,
+  useMotionValueEvent,
+} from "framer-motion";
 
-import Image from 'next/image'
-import { MegaMenu } from './MegaMenu'
-import { menuData } from './menu-item'
-import WhiteLogo from '../Logo/WhiteLogo'
-import { usePathname } from 'next/navigation'
-import BlackLogo from '../Logo/BlackLogo'
+import Image from "next/image";
+import { MegaMenu } from "./MegaMenu";
+import { menuData } from "./menu-item";
+import WhiteLogo from "../Logo/WhiteLogo";
+import { usePathname } from "next/navigation";
+import BlackLogo from "../Logo/BlackLogo";
 
 export function Navbar() {
-  const [activeCategory, setActiveCategory] = useState<string | null>(null)
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
-  const [expandedMobileCategory, setExpandedMobileCategory] = useState<string | null>(null);
+  const [activeCategory, setActiveCategory] = useState<string | null>(null);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [expandedMobileCategory, setExpandedMobileCategory] = useState<
+    string | null
+  >(null);
 
   const pathname = usePathname();
-  const isHome = pathname === '/';
+  const isHome = pathname === "/";
 
-  const { scrollY } = useScroll()
+  const { scrollY } = useScroll();
 
   // -------------------- FORCE NAVBAR BG --------------------
-  const forcedBg = useMotionValue(isHome ? "rgba(0,0,0,0)" : "rgba(255,255,255,1)");
+  const forcedBg = useMotionValue(
+    isHome ? "rgba(0,0,0,0)" : "rgba(255,255,255,1)"
+  );
 
   // --------------- SCROLL-BASED TRANSFORMS -----------------
   const headerBackdropBlur = useTransform(
@@ -60,7 +79,7 @@ export function Navbar() {
     }
   }, [isMobileMenuOpen, isHome]);
 
-  const navItems = ['WOMEN', 'MEN', 'KIDS', 'COLLECTION']
+  const navItems = ["WOMEN", "MEN", "KIDS", "COLLECTION"];
 
   return (
     <div>
@@ -78,14 +97,14 @@ export function Navbar() {
         <div className="max-w-7xl mx-auto px-6 md:px-0 text-black">
           <div className="flex items-center justify-between h-16">
             {/*============ Logo ================== */}
-            {isHome ? (
-              <WhiteLogo />
-            ) : (
-              <BlackLogo /> // import your black logo component or image
-            )}
-            
+            {isMobileMenuOpen || isHome ? <WhiteLogo /> : <BlackLogo />}
+
             {/*==================== Desktop Menu ===================== */}
-            <nav className={`hidden md:flex items-center space-x-12 h-full ${isHome ? "text-white" : "text-black"}`}>
+            <nav
+              className={`hidden md:flex items-center space-x-12 h-full ${
+                isHome ? "text-white" : "text-black"
+              }`}
+            >
               {navItems.map((item) => (
                 <div
                   key={item}
@@ -93,7 +112,9 @@ export function Navbar() {
                   onMouseEnter={() => setActiveCategory(item)}
                 >
                   <button
-                    className={`text-sm uppercase tracking-widest hover:text-gold transition-colors duration-300 flex items-center gap-1 ${activeCategory === item ? 'text-gold' : ''}`}
+                    className={`text-sm uppercase tracking-widest hover:text-gold transition-colors duration-300 flex items-center gap-1 ${
+                      activeCategory === item ? "text-gold" : ""
+                    }`}
                   >
                     {item}
                     {activeCategory === item && (
@@ -108,7 +129,10 @@ export function Navbar() {
             </nav>
 
             {/*==================== Icons ===================== */}
-            <div className="hidden md:flex items-center space-x-6 z-50 font-semibold" style={{ color: isHome ? 'white' : 'black' }}>
+            <div
+              className="hidden md:flex items-center space-x-6 z-50 font-semibold"
+              style={{ color: isHome ? "white" : "black" }}
+            >
               <button className="hover:text-gold transition-colors">
                 <Search strokeWidth={2} className="w-6 h-6" />
               </button>
@@ -129,10 +153,13 @@ export function Navbar() {
             <div className="md:hidden md:mt-0 mt-5 z-50">
               <button
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                style={{ color: isHome ? 'white' : 'black' }}
+                style={{ color: isHome ? "white" : "black" }}
               >
                 {isMobileMenuOpen ? (
-                  <X strokeWidth={2} style={{ color: isHome ? 'white' : 'white' }} />
+                  <X
+                    strokeWidth={2}
+                    style={{ color: isHome ? "white" : "white" }}
+                  />
                 ) : (
                   <Menu strokeWidth={2} />
                 )}
@@ -155,15 +182,23 @@ export function Navbar() {
         {isMobileMenuOpen && (
           <motion.div
             style={{ backgroundColor: forcedBg }}
-            initial={{ x: '100%' }}
+            initial={{ x: "100%" }}
             animate={{ x: 0 }}
-            exit={{ x: '100%' }}
-            transition={{ type: 'tween', duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+            exit={{ x: "100%" }}
+            transition={{
+              type: "tween",
+              duration: 0.4,
+              ease: [0.22, 1, 0.36, 1],
+            }}
             className="fixed inset-0 z-40 md:hidden overflow-y-auto"
           >
             <div className="pt-24 pb-12 px-6">
               {/* Mobile Icons */}
-              <div className={`flex items-center justify-end space-x-6 mb-8 pb-6 border-b border-gray-200 font-semibold ${isHome ? 'text-white' : 'text-white'}`}>
+              <div
+                className={`flex items-center justify-end space-x-6 mb-8 pb-6 border-b border-gray-200 font-semibold ${
+                  isHome ? "text-white" : "text-white"
+                }`}
+              >
                 <button className="hover:text-gold transition-colors">
                   <Search strokeWidth={2} className="w-6 h-6" />
                 </button>
@@ -181,23 +216,35 @@ export function Navbar() {
               </div>
 
               {/* Mobile Mega Menu Accordion */}
-              <nav className={`space-y-2 ${isHome ? 'text-white' : 'text-white'}`}>
+              <nav
+                className={`space-y-2 ${isHome ? "text-white" : "text-white"}`}
+              >
                 {navItems.map((category) => {
-                  const categoryData = menuData[category as keyof typeof menuData]
-                  const isExpanded = expandedMobileCategory === category
+                  const categoryData =
+                    menuData[category as keyof typeof menuData];
+                  const isExpanded = expandedMobileCategory === category;
                   return (
                     <div key={category} className="border-b border-gray-100">
                       {/* Category Header */}
                       <button
-                        onClick={() => setExpandedMobileCategory(isExpanded ? null : category)}
+                        onClick={() =>
+                          setExpandedMobileCategory(
+                            isExpanded ? null : category
+                          )
+                        }
                         className="w-full flex items-center justify-between py-4 text-left"
                       >
-                        <span className="text-xl font-serif italic">{category}</span>
+                        <span className="text-xl font-serif italic">
+                          {category}
+                        </span>
                         <motion.div
                           animate={{ rotate: isExpanded ? 180 : 0 }}
                           transition={{ duration: 0.3 }}
                         >
-                          <ChevronDown strokeWidth={1} className="w-5 h-5 text-gold" />
+                          <ChevronDown
+                            strokeWidth={1}
+                            className="w-5 h-5 text-gold"
+                          />
                         </motion.div>
                       </button>
 
@@ -206,9 +253,9 @@ export function Navbar() {
                         {isExpanded && (
                           <motion.div
                             initial={{ height: 0, opacity: 0 }}
-                            animate={{ height: 'auto', opacity: 1 }}
+                            animate={{ height: "auto", opacity: 1 }}
                             exit={{ height: 0, opacity: 0 }}
-                            transition={{ duration: 0.3, ease: 'easeInOut' }}
+                            transition={{ duration: 0.3, ease: "easeInOut" }}
                             className="overflow-hidden"
                           >
                             <div className="pb-6 space-y-6">
@@ -221,19 +268,30 @@ export function Navbar() {
                                 />
                                 <div className="absolute inset-0 bg-black/20" />
                                 <div className="absolute bottom-0 left-0 p-4 text-white">
-                                  <p className="text-xs uppercase tracking-widest mb-1">Featured</p>
-                                  <h4 className="text-lg font-serif italic">{categoryData.featuredTitle}</h4>
+                                  <p className="text-xs uppercase tracking-widest mb-1">
+                                    Featured
+                                  </p>
+                                  <h4 className="text-lg font-serif italic">
+                                    {categoryData.featuredTitle}
+                                  </h4>
                                 </div>
                               </div>
 
                               <div className="space-y-6">
                                 {categoryData.columns.map((column) => (
                                   <div key={column.title}>
-                                    <h4 className="text-xl uppercase tracking-widest font-semibold text-gold mb-3">{column.title}</h4>
+                                    <h4 className="text-xl uppercase tracking-widest font-semibold text-gold mb-3">
+                                      {column.title}
+                                    </h4>
                                     <ul className="space-y-2">
                                       {column.items.map((item) => (
                                         <li key={item}>
-                                          <a href="#" className="hover:text-gold transition-colors">{item}</a>
+                                          <a
+                                            href="#"
+                                            className="hover:text-gold transition-colors"
+                                          >
+                                            {item}
+                                          </a>
                                         </li>
                                       ))}
                                     </ul>
@@ -245,7 +303,7 @@ export function Navbar() {
                         )}
                       </AnimatePresence>
                     </div>
-                  )
+                  );
                 })}
               </nav>
             </div>
@@ -253,5 +311,5 @@ export function Navbar() {
         )}
       </AnimatePresence>
     </div>
-  )
+  );
 }

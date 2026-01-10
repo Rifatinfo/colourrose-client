@@ -15,7 +15,7 @@ const nextConfig: NextConfig = {
         hostname: 'res.cloudinary.com',
         pathname: '/**', // allow any path under i.ibb.co
       },
-       {
+      {
         protocol: "https",
         hostname: "images.unsplash.com",
         pathname: "/**",
@@ -34,7 +34,7 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "colourrose.shop",
         pathname: "/**",
-      },
+      }
     ],
   },
 };

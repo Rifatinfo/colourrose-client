@@ -8,7 +8,7 @@ const Breadcrumb = () => {
   const segments = pathname.split("/").filter(Boolean);
 
   return (
-    <div className="w-full bg-gray-50 border-b border-gray-100">
+    <div className="w-full bg-gray-50 border-b border-gray-100 mt-[64px]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <nav className="flex justify-end items-center h-20 font-light  uppercase tracking-widest">
           <Link href="/" className="hover:text-black transition">

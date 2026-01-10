@@ -32,6 +32,17 @@ export function ProductCard({
     const [isHovered, setIsHovered] = useState(false)
     const [isWishlisted, setIsWishlisted] = useState(false)
 
+    // =============  Determine if product is sold (out of stock) =============//
+    const isSold = product.stockQuantity !== undefined ? product.stockQuantity <= 0 : product.sold || false;
+
+    // ============= Extract unique sizes and colors from variants =============//
+    const sizes: string[] = product.variants
+        ? Array.from(new Set(product.variants.map((v: any) => v.size)))
+        : [];
+
+    const colors: string[] = product.variants
+        ? Array.from(new Set(product.variants.map((v: any) => v.color)))
+        : [];
     return (
         <div>
             <motion.div
@@ -43,13 +54,19 @@ export function ProductCard({
                 {/* Image Container */}
                 <div
                     className={`relative overflow-hidden bg-neutral-100 ${isLarge
-                            ? 'aspect-[4/5] md:h-[650px] lg:h-[800px]'
-                            : 'aspect-[4/5] md:h-[520px] lg:h-[850px]'
+                        ? 'aspect-[4/5] md:h-[650px] lg:h-[800px]'
+                        : 'aspect-[4/5] md:h-[520px] lg:h-[850px]'
                         }`}
                 >
+                    {/* <Image
+                        fill
+                         src={product.images && product.images.length > 0 ? product.images[0].url : "/placeholder.png"}
+                        alt={product.name}
+                        className="h-full w-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105"
+                    /> */}
                     <Image
                         fill
-                        src={product.image}
+                        src="https://colourrose.shop/wp-content/uploads/2024/03/P-1131-01.jpg"
                         alt={product.name}
                         className="h-full w-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105"
                     />
@@ -64,7 +81,7 @@ export function ProductCard({
                     )} */}
 
                     {/* Sold Badge (top-left black) */}
-                    {product.sold && (
+                    {isSold && (
                         <div className="absolute top-4 left-4">
                             <span className="bg-black px-3 py-1 text-xs font-bold uppercase text-white">
                                 Sold
@@ -108,7 +125,7 @@ export function ProductCard({
                                     </div>
                                     <div className='flex justify-between items-center'>
                                         <div className="flex items-center justify-start  gap-1">
-                                            {product.sizes.map((size: string) => (
+                                            {sizes.map((size: string) => (
                                                 <button
                                                     key={size}
                                                     className="h-8 w-8 flex items-center justify-center text-xs border border-neutral-200 rounded-full hover:border-black hover:bg-black hover:text-white transition-all duration-200"
@@ -120,7 +137,7 @@ export function ProductCard({
 
                                         {/* Colors */}
                                         <div className="flex items-center justify-start  gap-1">
-                                            {product.colors.map((color: string, i: number) => (
+                                            {colors.map((color: string, i: number) => (
                                                 <button
                                                     key={i}
                                                     style={{ backgroundColor: color }}
@@ -131,7 +148,13 @@ export function ProductCard({
                                     </div>
 
                                     {/* Add to Bag */}
-                                    <button className="cursor-pointer w-full bg-black text-white py-3 text-sm font-bold uppercase tracking-widest hover:bg-neutral-800 transition-colors flex items-center justify-center gap-2 mt-1">
+                                    <button
+                                        disabled={isSold} // disable if sold
+                                        // className="cursor-pointer w-full bg-black text-white py-3 text-sm font-bold uppercase tracking-widest hover:bg-neutral-800 transition-colors flex items-center justify-center gap-2 mt-1">
+                                        className={`cursor-pointer w-full py-3 text-sm font-bold uppercase tracking-widest flex items-center justify-center gap-2 mt-1 transition-colors ${isSold
+                                            ? "bg-gray-400 text-white cursor-not-allowed"
+                                            : "bg-black text-white hover:bg-neutral-800"
+                                            }`} >
                                         <ShoppingBag className="w-4 h-4" />
                                         Add to Bag
                                     </button>
@@ -147,8 +170,11 @@ export function ProductCard({
                         <div className="flex justify-between items-start">
                             <div>
                                 <p className="text-xs font-medium uppercase tracking-widest text-white mb-1">
-                                    {product.category}
+                                    {product.categories && product.categories.length > 0
+                                        ? product.categories[0].categoryId.toUpperCase()
+                                        : "UNCATEGORIZED"}
                                 </p>
+
                                 <h3 className="text-lg font-medium leading-tight text-white">
                                     {product.name}
                                 </h3>
@@ -156,7 +182,8 @@ export function ProductCard({
                         </div>
 
                         <div className="flex justify-between items-center mt-2">
-                            <span className="text-base font-semibold text-white">{product.price}</span>
+                            <span className="text-base font-semibold text-white">{product.salePrice} ৳
+                            </span>
                         </div>
                     </div>
                 )}

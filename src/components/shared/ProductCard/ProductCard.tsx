@@ -44,7 +44,7 @@ export function ProductCard({
                 <div
                     className={`relative overflow-hidden bg-neutral-100 ${isLarge
                             ? 'aspect-[4/5] md:h-[650px] lg:h-[800px]'
-                            : 'aspect-[4/5] md:h-[520px] lg:h-[600px]'
+                            : 'aspect-[4/5] md:h-[520px] lg:h-[850px]'
                         }`}
                 >
                     <Image

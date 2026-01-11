@@ -1,24 +1,65 @@
-// import { products } from "@/lib/products";
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
-const SubcategoryPage = () => {
-// {params} : {params: {category: string, subCategory: string}}
-//    const filtered = products.filter(
-//     (p) =>
-//       p.category === params.category &&
-//       p.subCategory === params.subCategory
-//   );
+import ProductListHeader from "@/components/modules/product/ProductListHeader";
+import Breadcrumb from "@/components/shared/Breadcrumb/Breadcrumb";
+import TablePagination from "@/components/shared/pagination/TablePagination";
+import { ProductCard } from "@/components/shared/ProductCard/ProductCard";
+import { fetchProductsBySubCategory } from "@/services/product/product";
+import { Suspense } from "react";
 
-  return (
-    <div>
-      {/* <h1>
-        {params.category} → {params.subCategory}
-      </h1> */}
-
-      {/* {filtered.map((p) => (
-        <p key={p.id}>{p.name}</p>
-      ))} */}
-    </div>
-  );
+export interface PageProps {
+  params: Promise<{
+    category: string;
+    subCategory: string;
+  }>;
+  searchParams: Promise<{
+    page?: string;
+    limit?: string;
+    sortBy?: string;
+    sortOrder?: string;
+  }>;
 }
 
-export default SubcategoryPage;
+const SubCategoryPage = async ({ params, searchParams }: PageProps) => {
+  const { category, subCategory } = await params;
+  const sp = await searchParams;
+
+  const response = await fetchProductsBySubCategory(
+    category,
+    subCategory,
+    sp
+  );
+
+  const products = response?.data ?? [];
+  const total = response?.meta?.total ?? 0;
+  const limit = Number(response?.meta?.limit) || 10;
+  const currentPage = Number(response?.meta?.page) || 1;
+  const totalPages = Math.max(1, Math.ceil(total / limit));
+
+  return (
+    <div className="space-y-6">
+      <Breadcrumb />
+
+      <ProductListHeader total={total} />
+
+      {products.length === 0 ? (
+        <p>No products found in this sub-category.</p>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-3">
+          {products.map((product: any) => (
+            <ProductCard key={product.id} product={product} />
+          ))}
+        </div>
+      )}
+
+      <Suspense fallback={null}>
+        <TablePagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+        />
+      </Suspense>
+    </div>
+  );
+};
+
+export default SubCategoryPage;

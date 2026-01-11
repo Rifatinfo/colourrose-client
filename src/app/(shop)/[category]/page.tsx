@@ -1,41 +1,24 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import ProductListHeader from "@/components/modules/product/ProductListHeader";
 import Breadcrumb from "@/components/shared/Breadcrumb/Breadcrumb";
+import TablePagination from "@/components/shared/pagination/TablePagination";
 import { ProductCard } from "@/components/shared/ProductCard/ProductCard";
+import { fetchProductsByCategory } from "@/services/product/product";
+import { Suspense } from "react";
 
-interface PageProps {
+export interface PageProps {
     params: {
         category: string
     }
     searchParams: Promise<{
+        page?: string;
+        limit?: string;
         sortBy?: string
         sortOrder?: string
     }>
 }
 
 
-const fetchProductsByCategory = async (category: string, searchParams: PageProps["searchParams"]) => {
-    const sp = await searchParams
-    const query = new URLSearchParams({
-        category,
-        ...(sp.sortBy && { sortBy: sp.sortBy }),
-        ...(sp.sortOrder && { sortOrder: sp.sortOrder }),
-    }).toString()
-
-    // const sp = await searchParams;
-
-    // const query = new URLSearchParams();
-
-    // if (category) query.append("category", category);
-    // if (sp.sortBy) query.append("sortBy", sp.sortBy);
-    // if (sp.sortOrder) query.append("sortOrder", sp.sortOrder);
-
-    const res = await fetch(`http://localhost:5000/api/v1/product?${query}`, {
-        cache: "no-store",
-    });
-    return res.json();
-
-};
 
 const CategoryPage = async ({ params, searchParams }: PageProps) => {
     const { category } = await params;
@@ -43,10 +26,13 @@ const CategoryPage = async ({ params, searchParams }: PageProps) => {
 
     const response = await fetchProductsByCategory(category, searchParams);
 
-    // const products = response.data; // ✅ already sorted & filtered
-    // const total = response.meta.total;
     const products = response?.data ?? [];
     const total = response?.meta?.total ?? 0;
+    const limit = Number(response?.meta?.limit) || 10;
+    const currentPage = Number(response?.meta?.page) || 1;
+    const totalPages = Math.max(1, Math.ceil(total / limit));
+    console.log("currentPage : ", currentPage, " totalPages : ", totalPages);
+
     return (
         <div className="space-y-6">
             <div className="bg-gray-200">
@@ -64,6 +50,15 @@ const CategoryPage = async ({ params, searchParams }: PageProps) => {
                     ))}
                 </div>
             )}
+
+            <div>
+                <Suspense fallback={null}>
+                    <TablePagination
+                        currentPage={currentPage}
+                        totalPages={totalPages}
+                    />
+                </Suspense>
+            </div>
         </div>
     );
 };

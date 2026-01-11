@@ -4,22 +4,23 @@ import Breadcrumb from "@/components/shared/Breadcrumb/Breadcrumb";
 import { ProductCard } from "@/components/shared/ProductCard/ProductCard";
 
 interface PageProps {
-    params: {
-        category: string;
-    },
-    searchParams: {
-        sortBy?: string;
-        sortOrder?: string;
-    };
+  params: {
+    category: string
+  }
+  searchParams: Promise<{
+    sortBy?: string
+    sortOrder?: string
+  }>
 }
 
-const fetchProductsByCategory = async (category: string, searchParams: PageProps["searchParams"]) => {
 
+const fetchProductsByCategory = async (category: string, searchParams: PageProps["searchParams"]) => {
+    const sp = await searchParams
     const query = new URLSearchParams({
-        category,
-        ...(searchParams.sortBy && { sortBy: searchParams.sortBy }),
-        ...(searchParams.sortOrder && { sortOrder: searchParams.sortOrder }),
-    }).toString();
+    category,
+    ...(sp.sortBy && { sortBy: sp.sortBy }),
+    ...(sp.sortOrder && { sortOrder: sp.sortOrder }),
+  }).toString()
 
 
     const res = await fetch(`http://localhost:5000/api/v1/product?${query}`, {

@@ -171,7 +171,7 @@ export function ProductCard({
                             <div>
                                 <p className="text-xs font-medium uppercase tracking-widest text-white mb-1">
                                     {product.categories && product.categories.length > 0
-                                        ? product.categories[0].categoryId.toUpperCase()
+                                        ? product.categories[1].categoryId.toUpperCase()
                                         : "UNCATEGORIZED"}
                                 </p>
 

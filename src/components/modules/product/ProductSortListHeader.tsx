@@ -52,7 +52,7 @@ const ProductSortListHeader = ({ total }: Props) => {
             <div className="flex justify-center md:justify-end">
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                        <button className="flex items-center gap-2 border px-6 py-3 rounded-sm text-sm hover:bg-gray-50">
+                        <button className="flex items-center gap-2 px-6 py-3 rounded-sm text-sm bg-gray-50 border-none">
                             {currentLabel}
                             <ChevronDown className="h-4 w-4" />
                         </button>

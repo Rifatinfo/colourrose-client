@@ -1,28 +1,32 @@
 import ProductPage from "@/components/modules/ProductViewDetails/ProductPage";
-// import { products } from "@/lib/products";
 
-const page = () => {
-    
-    // { params }: { params: { category: string, subCategory: string, slug: string } }
-    // const product = products.find(
-    //     (p) =>
-    //         p.slug === params.slug &&
-    //         p.category === params.category &&
-    //         p.subCategory === params.subCategory
-    // );
-
-    // if (!product) return;
-
-    return (
-        <div>
-            {/* <div className="hidden" >
-                <h1>{product.name}</h1>
-                <p>Price: ৳{product.price}</p>
-            </div> */}
-            <div>
-                <ProductPage/>
-            </div>
-        </div>
-    );
+interface PageProps {
+  params: {
+    category: string;
+    subCategory: string;
+    slug: string;
+  };
 }
-export default page;
+
+const ProductDetailsPage = async ({ params }: PageProps) => {
+  const { slug } = params;
+
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/product/${slug}`,
+    {
+      cache: "no-store",
+    }
+  );
+
+//   if (!res.ok) {
+//     throw new Error("Product not found");
+//   }
+
+  const json = await res.json();
+  const product = json.data;
+  console.log(json);
+  
+  return <ProductPage product={product} />;
+};
+
+export default ProductDetailsPage;

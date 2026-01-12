@@ -35,7 +35,8 @@ const SubCategoryPage = async ({ params, searchParams }: PageProps) => {
   const limit = Number(response?.meta?.limit) || 10;
   const currentPage = Number(response?.meta?.page) || 1;
   const totalPages = Math.max(1, Math.ceil(total / limit));
-
+  console.log(category,subCategory);
+  
   return (
     <div className="space-y-6">
       <Breadcrumb />
@@ -47,7 +48,10 @@ const SubCategoryPage = async ({ params, searchParams }: PageProps) => {
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-3">
           {products.map((product: any) => (
-            <ProductCard key={product.id} product={product} />
+            <ProductCard key={product.id} 
+            product={product}  
+            category={category}
+            subCategory={subCategory} />
           ))}
         </div>
       )}

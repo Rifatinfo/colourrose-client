@@ -94,7 +94,7 @@ export function Navbar() {
         className="fixed top-0 left-0 right-0 z-50"
         onMouseLeave={() => setActiveCategory(null)}
       >
-        <div className="max-w-7xl mx-auto px-6 md:px-0 text-black">
+        <div className="px-6 md:px-10 text-black">
           <div className="flex items-center justify-between h-16">
             {/*============ Logo ================== */}
             {isMobileMenuOpen || isHome ? <WhiteLogo /> : <BlackLogo />}

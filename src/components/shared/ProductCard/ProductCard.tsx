@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ShoppingBag, Heart } from 'lucide-react'
 import Image from 'next/image'
+import Link from 'next/link';
 
 
 
@@ -22,11 +23,22 @@ const item = {
     },
 }
 
+interface ProductCardProps {
+  product: any;
+  category: string;
+  subCategory?: string;
+}
+
+
 export function ProductCard({
-    product,
+     product,
+     category,
+     subCategory,
     isLarge = false,
 }: {
     product: any
+    category: string;
+    subCategory?: string;
     isLarge?: boolean
 }) {
     const [isHovered, setIsHovered] = useState(false)
@@ -43,8 +55,14 @@ export function ProductCard({
     const colors: string[] = product.variants
         ? Array.from(new Set(product.variants.map((v: any) => v.color)))
         : [];
+
+     // ✅ always include subCategory in URL if available
+  const href = subCategory
+    ? `/${category}/${subCategory}/${product.slug}`
+    : `/${category}/${product.slug}`;
     return (
         <div>
+            <Link href={href}>
             <motion.div
                 variants={item}
                 className={`group relative flex flex-col ${isLarge ? 'h-full' : 'h-full'}`}
@@ -169,20 +187,20 @@ export function ProductCard({
                     <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/70 to-transparent p-4 flex flex-col gap-1 shadow-md pointer-events-none">
                         <div className="flex justify-between items-start">
                             <div>
-                                <p className="text-xs font-medium uppercase tracking-widest text-white mb-1">
+                                {/* <p className="text-xs font-medium uppercase tracking-widest text-white mb-1">
                                     {product.categories && product.categories.length > 0
                                         ? product.categories[0].categoryId.toUpperCase()
                                         : "UNCATEGORIZED"}
-                                </p>
+                                </p> */}
 
                                 <h3 className="text-lg font-medium leading-tight text-white">
                                     {product.name}
-                                </h3>
+                                </h3> 
                             </div>
                         </div>
 
                         <div className="flex justify-between items-center mt-2">
-                            <span className="text-base font-semibold text-white">{product.salePrice} ৳
+                            <span className="text-base font-semibold text-white">{product.salePrice} TK
                             </span>
                         </div>
                     </div>
@@ -190,6 +208,8 @@ export function ProductCard({
 
 
             </motion.div>
+            </Link>
         </div>
     )
 }
+

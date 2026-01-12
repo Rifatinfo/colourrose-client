@@ -47,7 +47,7 @@ const CategoryPage = async ({ params, searchParams }: PageProps) => {
             ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-3">
                     {products.map((product: any) => (
-                        <ProductCard key={product.id} product={product} />
+                        <ProductCard key={product.id} product={product} category={category} />
                     ))}
                 </div>
             )}

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useState } from 'react'
@@ -18,7 +19,7 @@ const tabs = [
     label: 'Reviews (0)',
   },
 ]
-const ProductTabs = () => {
+const ProductTabs = ({ product }: { product: any }) => {
   const [activeTab, setActiveTab] = useState('description')
   const [rating, setRating] = useState(0)
   const [hoverRating, setHoverRating] = useState(0)

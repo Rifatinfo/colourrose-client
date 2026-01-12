@@ -1,16 +1,10 @@
 import WhiteLogo from "../Logo/WhiteLogo";
-import {
-  Facebook,
-  Instagram,
-  Youtube,
-  Twitter,
-  Music,
-} from "lucide-react";
+
 import SocialIcons from "./SocialIcons";
 const Footer = () => {
     return (
-        <footer className="bg-black text-white py-16 px-4 md:px-0">
-            <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-12">
+        <footer className="bg-black text-white py-16 px-4 md:px-10">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
                 <div className="col-span-1 md:col-span-2">
                     {/* <h3 className="text-lg font-bold mb-6 tracking-tight">
                         LET&rsquo;S CONNECT
@@ -59,6 +53,16 @@ const Footer = () => {
                         <li>
                             <a href="#" className="hover:text-white hover:underline hover:underline-offset-4">
                                 Our Team
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" className="hover:text-white hover:underline hover:underline-offset-4">
+                                Our Policy
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" className="hover:text-white hover:underline hover:underline-offset-4">
+                               Full time Dedication
                             </a>
                         </li>
                     </ul>

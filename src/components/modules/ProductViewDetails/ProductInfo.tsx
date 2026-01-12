@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
 import { useState } from 'react'
@@ -8,19 +9,23 @@ import {
     Plus,
     ShoppingBag,
     Store,
-    ChevronDown,
     Zap,
 } from 'lucide-react'
 import { motion } from 'framer-motion';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import Swal from 'sweetalert2';
 
 interface Product {
     id: string;
     name: string;
-    price: number;
+    salePrice: number;
     sku: string;
     image: string;
     color: string;
     size: string;
+    shortDescription: string;
+    subCategories: Array<{ subCategoryId: string }>;
+    variants: Array<{ size: string; color: string; quantity: number }>;
 }
 
 interface ProductInfoProps {
@@ -32,13 +37,29 @@ export function ProductInfo({ product,
     onShopNow,
     onPickup, }: ProductInfoProps) {
     const [quantity, setQuantity] = useState(1)
-    const [selectedSize, setSelectedSize] = useState('M')
-    const [selectedColor, setSelectedColor] = useState('Navy Blue')
-    const sizes = ['S', 'M', 'L', 'XL', 'XXL', '3XL']
-    const colors = ['Navy Blue', 'Black', 'White', 'Royal Blue', 'Maroon']
+    const [selectedSize, setSelectedSize] = useState<string | undefined>(undefined);
+    const [selectedColor, setSelectedColor] = useState<string | undefined>(undefined);
+
+    const sizes = Array.from(
+        new Set(product.variants.map(v => v.size))
+    );
+    const colors = Array.from(
+        new Set(product.variants.map(v => v.color))
+    );
+
+
+    // ======================== Stock Track ========================//
+    const selectedVariant = product.variants.find(
+        (v: any) =>
+            v.color === selectedColor &&
+            v.size === selectedSize
+    );
+
+    const stock = selectedVariant?.quantity ?? 0;
+
     return (
         <div className="flex flex-col space-y-8 md:px-20">
-            {/* Header */}
+            {/*========================= Header =========================*/}
             <div className="space-y-4">
                 <motion.h1
                     initial={{
@@ -49,9 +70,9 @@ export function ProductInfo({ product,
                         opacity: 1,
                         y: 0,
                     }}
-                    className="text-3xl md:text-4xl font-serif font-medium text-gray-900 tracking-tight"
+                    className="text-3xl md:text-4xl font-serif uppercase font-medium text-gray-900 tracking-tight"
                 >
-                    EMBROIDERY PANJABI
+                    {product.name}
                 </motion.h1>
                 <motion.div
                     initial={{
@@ -67,11 +88,11 @@ export function ProductInfo({ product,
                     }}
                     className="text-2xl font-medium text-gray-900"
                 >
-                    2,990.00৳
+                    {product.salePrice}.00 TK
                 </motion.div>
             </div>
 
-            {/* Description */}
+            {/*========================= Description =========================*/}
             <motion.div
                 initial={{
                     opacity: 0,
@@ -85,73 +106,101 @@ export function ProductInfo({ product,
                 className="prose prose-sm text-gray-600"
             >
                 <p>
-                    Stylishly printed Punjabi kurta for traditional flair with modern
-                    appeal. Crafted from premium BAMBOO SILK for exceptional comfort and
-                    breathability.
+                    {product.shortDescription}
                 </p>
             </motion.div>
 
             {/*========================= Selectors ========================*/}
             <div className="space-y-6 pt-4 border-t border-gray-100">
-                {/* Color Dropdown */}
+                {/*======================= Color Dropdown =========================*/}
                 <div className="space-y-3">
-                    <label
-                        htmlFor="color-select"
-                        className="block text-sm font-medium text-gray-900"
-                    >
+                    <label className="block text-sm font-medium text-gray-900">
                         Color
                     </label>
-                    <div className="relative">
-                        <select
-                            id="color-select"
-                            value={selectedColor}
-                            onChange={(e) => setSelectedColor(e.target.value)}
-                            className="w-full appearance-none px-4 py-3 pr-10 border-2 border-gray-200 rounded-none bg-white text-gray-900 font-medium focus:border-black focus:ring-0 transition-colors cursor-pointer"
+
+                    <Select
+                        value={selectedColor}
+                        onValueChange={setSelectedColor}
+                    >
+                        <SelectTrigger
+                            className="
+                            w-full px-4 py-6
+                            border-2 border-gray-200
+                            rounded-none
+                            text-gray-900 font-medium
+                            focus:ring-0 focus:border-black
+                        "
                         >
+                            <SelectValue placeholder="Select color" />
+                        </SelectTrigger>
+
+                        <SelectContent>
                             {colors.map((color) => (
-                                <option key={color} value={color}>
+                                <SelectItem key={color} value={color}>
                                     {color}
-                                </option>
+                                </SelectItem>
                             ))}
-                        </select>
-                        <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400 pointer-events-none" />
-                    </div>
+                        </SelectContent>
+                    </Select>
                 </div>
 
-                {/* Size Dropdown */}
+
+                {/*======================= Size Dropdown =========================*/}
                 <div className="space-y-3">
                     <div className="flex justify-between items-center">
-                        <label
-                            htmlFor="size-select"
-                            className="block text-sm font-medium text-gray-900"
-                        >
+                        <label className="block text-sm font-medium text-gray-900">
                             Size
                         </label>
-                        <button className="text-xs text-black underline hover:text-black">
+                        <button className="text-sm underline font-medium text-gray-900">
                             Size Guide
                         </button>
                     </div>
-                    <div className="relative">
-                        <select
-                            id="size-select"
-                            value={selectedSize}
-                            onChange={(e) => setSelectedSize(e.target.value)}
-                            className="w-full appearance-none px-4 py-3 pr-10 border-2 border-gray-200 rounded-none bg-white text-gray-900 font-medium focus:border-black focus:ring-0 transition-colors cursor-pointer"
+
+                    <Select
+                        value={selectedSize}
+                        onValueChange={setSelectedSize}
+                    >
+                        <SelectTrigger
+                            className="
+                            w-full px-4 py-6
+                            border-2 border-gray-200
+                            rounded-none
+                            text-gray-900 font-medium
+                            focus:ring-0 focus:border-black
+                        "
                         >
+                            <SelectValue placeholder="Select size" />
+                        </SelectTrigger>
+
+                        <SelectContent>
                             {sizes.map((size) => (
-                                <option key={size} value={size}>
+                                <SelectItem key={size} value={size}>
                                     {size}
-                                </option>
+                                </SelectItem>
                             ))}
-                        </select>
-                        <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400 pointer-events-none" />
-                    </div>
+                        </SelectContent>
+                    </Select>
+                </div>
+
+
+                <div>
+                    {/* ======================= Stock Info ======================= */}
+                    {/* {selectedColor && selectedSize && (
+                        <p
+                            className={`text-sm font-medium ${stock === 0 ? "text-red-600" : "text-gray-900"
+                                }`}
+                        >
+                            {stock === 0
+                                ? "OUT OF STOCK"
+                                : `IN STOCK: ${stock} AVAILABLE`}
+                        </p>
+                    )} */}
                 </div>
             </div>
 
             {/*======================== Actions ========================*/}
 
-            <div className="space-y-4 pt-6 border-t border-gray-100 mt-5">
+            <div className="space-y-4 pt-6 border-t border-gray-100 mt-1.5">
                 <div className="flex flex-col sm:flex-row gap-4">
                     {/*=============== Quantity ======================*/}
                     <div className="flex items-center border border-gray-300 w-32">
@@ -168,7 +217,32 @@ export function ProductInfo({ product,
                             className="w-12 h-12 text-center border-x border-gray-300 text-gray-900 focus:outline-none"
                         />
                         <button
-                            onClick={() => setQuantity(quantity + 1)}
+                            onClick={() => {
+                                if (!selectedColor) {
+                                    Swal.fire({
+                                        icon: "warning",
+                                        title: "Please select a color first",
+                                    });
+                                    return;
+                                }
+                                if (!selectedSize) {
+                                    Swal.fire({
+                                        icon: "warning",
+                                        title: "Please select a size first",
+                                    });
+                                    return;
+                                }
+
+                                if (quantity < stock) {
+                                    setQuantity((prev) => prev + 1);
+                                } else {
+                                    Swal.fire({
+                                        icon: "error",
+                                        title: "LIMIT EXCEEDED",
+                                        text: `Only ${stock} item(s) available`,
+                                    });
+                                }
+                            }}
                             className="w-10 h-12 flex items-center justify-center text-gray-600 hover:bg-gray-50"
                         >
                             <Plus className="h-4 w-4" />
@@ -176,7 +250,42 @@ export function ProductInfo({ product,
                     </div>
 
                     {/*=============== Add to Cart ================== */}
-                    <button className="flex-1 bg-black text-white h-12 px-8 py-4 flex items-center justify-center gap-2 cursor-pointer transition-colors uppercase tracking-wider text-sm font-medium">
+                    <button
+                        onClick={() => {
+                            if (!selectedColor) {
+                                Swal.fire({
+                                    icon: "warning",
+                                    title: "Please select a color first",
+                                });
+                                return;
+                            }
+                            if (!selectedSize) {
+                                Swal.fire({
+                                    icon: "warning",
+                                    title: "Please select a size first",
+                                });
+                                return;
+                            }
+
+                            if (stock === 0) {
+                                Swal.fire({
+                                    icon: "error",
+                                    title: "OUT OF STOCK",
+                                    text: "This product is currently unavailable",
+                                });
+                                return;
+                            }
+
+                            if (quantity > stock) {
+                                Swal.fire({
+                                    icon: "error",
+                                    title: "LIMIT EXCEEDED",
+                                    text: `Only ${stock} item(s) available`,
+                                });
+                                return;
+                            }
+                        }}
+                        className="flex-1 bg-black text-white h-12 px-8 py-4 flex items-center justify-center gap-2 cursor-pointer transition-colors uppercase tracking-wider text-sm font-medium" >
                         <ShoppingBag className="h-4 w-4" />
                         Add to Cart
                     </button>
@@ -185,7 +294,43 @@ export function ProductInfo({ product,
                 <div className="flex flex-col sm:flex-row items-center justify-between gap-4 w-full">
                     {/*================== Shop Now Button =================*/}
                     <button
-                        onClick={onShopNow}
+                        onClick={() => {
+                            if (!selectedColor) {
+                                Swal.fire({
+                                    icon: "warning",
+                                    title: "Please select a color first",
+                                });
+                                return;
+                            }
+                            if (!selectedSize) {
+                                Swal.fire({
+                                    icon: "warning",
+                                    title: "Please select a size first",
+                                });
+                                return;
+                            }
+
+                            if (stock === 0) {
+                                Swal.fire({
+                                    icon: "error",
+                                    title: "OUT OF STOCK",
+                                    text: "This product is currently unavailable",
+                                });
+                                return;
+                            }
+
+                            if (quantity > stock) {
+                                Swal.fire({
+                                    icon: "error",
+                                    title: "LIMIT EXCEEDED",
+                                    text: `Only ${stock} item(s) available`,
+                                });
+                                return;
+                            }
+                            //================= All checks passed =================//
+                            onShopNow();
+                        }}
+                        
                         className="w-full sm:w-auto bg-black text-white h-12 px-6 sm:px-8 flex items-center justify-center gap-2 transition-all shadow-md hover:shadow-lg uppercase tracking-wider text-sm font-bold cursor-pointer"
                     >
                         <Zap className="h-4 w-4" />
@@ -216,15 +361,18 @@ export function ProductInfo({ product,
                 </div>
             </div>
 
+
             {/* Meta */}
             <div className="pt-6 border-t border-gray-100 space-y-2 text-xs text-gray-500 uppercase tracking-wide">
                 <p>
-                    SKU: <span className="text-gray-900">P-1361</span>
+                    SKU: <span className="text-gray-900">{product.sku}</span>
                 </p>
                 <p>
-                    Categories: <span className="text-gray-900">EID-25, Men Panjabi</span>
+                    Categories: <span className="text-gray-900">{product.subCategories
+                        .map(sc => sc.subCategoryId)
+                        .join(", ")}</span>
                 </p>
             </div>
-        </div>
+        </div >
     )
 }

@@ -58,8 +58,8 @@ export function ProductCard({
 
      // ✅ always include subCategory in URL if available
   const href = subCategory
-    ? `/${category}/${subCategory}/${product.slug}`
-    : `/${category}/${product.slug}`;
+    ? `/${category}/product/${subCategory}/${product.slug}`
+    : `/${category}/product/${product.slug}`;
     return (
         <div>
             <Link href={href}>

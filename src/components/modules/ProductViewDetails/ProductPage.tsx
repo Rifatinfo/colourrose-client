@@ -11,22 +11,12 @@ import Breadcrumb from '@/components/shared/Breadcrumb/Breadcrumb';
 
 type CartMode = "SHOP" | "PICKUP";
 
-
-const ProductPage = ({ product }: { product: any }) => {
+type ProductPageProps = {
+  product: any;
+};
+const ProductPage = ({ product }: ProductPageProps) => {
     const [isCartOpen, setIsCartOpen] = useState(false);
     const [mode, setMode] = useState<CartMode>("SHOP");
-
-    // ✅ This will come from DB / API later
-    // const product = {
-    //     id: "1",
-    //     name: "EMBROIDERY PANJABI",
-    //     price: 2990,
-    //     sku: "P-1361",
-    //     color: "Navy Blue",
-    //     size: "M",
-    //     image:
-    //         "https://res.cloudinary.com/dgp5rqeqh/image/upload/v1767438820/WhatsApp_Image_2026-01-03_at_5.09.34_PM_1_fg0dlm.jpg",
-    // };
 
     return (
         <div className="min-h-screen bg-white font-sans text-gray-900">

@@ -12,15 +12,15 @@ const ProductDetailsPage = async ({ params }: PageProps) => {
   const { slug } = params;
 
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/product/${slug}`,
+    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/product/slug/${slug}`,
     {
       cache: "no-store",
     }
   );
 
-//   if (!res.ok) {
-//     throw new Error("Product not found");
-//   }
+  // if (!res.ok) {
+  //   throw new Error("Product not found");
+  // }
 
   const json = await res.json();
   const product = json.data;

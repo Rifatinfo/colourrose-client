@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from 'react'
 import { X, ShoppingBag, ArrowRight, Minus, Plus, Trash2 } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Image from 'next/image';
+import { useCart } from '@/context/CartContext';
+import Swal from 'sweetalert2';
 
 interface Product {
     id: string;
@@ -22,18 +23,12 @@ interface CartDrawerProps {
     product: Product;
 }
 export function CartDrawer({ isOpen, onClose, mode }: CartDrawerProps) {
-    const [quantity, setQuantity] = useState(1)
-    // Product details
-    const product = {
-        name: 'EMBROIDERY PANJABI',
-        price: 2990.0,
-        color: 'Navy Blue',
-        size: 'M',
-        image:
-            'https://res.cloudinary.com/dgp5rqeqh/image/upload/v1767438820/WhatsApp_Image_2026-01-03_at_5.09.34_PM_1_fg0dlm.jpg',
-        sku: 'P-1361',
-    }
-    const subtotal = product.price * quantity
+
+    const { cart, updateQty, removeItem } = useCart();
+    const subtotal = cart.reduce(
+        (sum, item) => sum + item.price * item.quantity,
+        0
+    );
 
     return (
         <AnimatePresence>
@@ -90,69 +85,110 @@ export function CartDrawer({ isOpen, onClose, mode }: CartDrawerProps) {
                             <div className="flex flex-col h-full">
                                 {/*================ Product List =================*/}
                                 <div className="flex-1 overflow-y-auto p-4 space-y-6">
-                                    <div className="flex gap-4">
-                                        {/* Product Image */}
-                                        <div className="flex-shrink-0 w-24 h-32 bg-gray-100 overflow-hidden">
-                                            <Image
-                                                width={96}
-                                                height={128}
-                                                src={product.image}
-                                                alt={product.name}
-                                                className="w-full h-full object-cover"
-                                            />
-                                        </div>
-
-                                        {/* Product Details */}
-                                        <div className="flex-1 flex flex-col">
-                                            <div className="flex justify-between items-start mb-2">
-                                                <div>
-                                                    <h3 className="font-medium text-gray-900 text-sm">{product.name}</h3>
-                                                    <p className="text-xs text-gray-500 mt-1">SKU: {product.sku}</p>
-                                                </div>
-                                                <button className="text-gray-400 hover:text-red-500 transition-colors">
-                                                    <Trash2 className="h-4 w-4" />
-                                                </button>
-                                            </div>
-
-                                            {/* Variants */}
-                                            <div className="text-xs text-gray-600 space-y-1 mb-3">
-                                                <p>
-                                                    Color: <span className="font-medium text-gray-900">{product.color}</span>
-                                                </p>
-                                                <p>
-                                                    Size: <span className="font-medium text-gray-900">{product.size}</span>
-                                                </p>
-                                            </div>
-
-                                            {/* Price and Quantity */}
-                                            <div className="flex items-center justify-between mt-auto gap-2 md:gap-0">
-                                                <div className="flex items-center border border-gray-300">
-                                                    <button
-                                                        onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                                                        className="w-8 h-8 flex items-center justify-center text-gray-600 hover:bg-gray-50"
-                                                    >
-                                                        <Minus className="h-3 w-3" />
-                                                    </button>
-                                                    <input
-                                                        type="text"
-                                                        value={quantity}
-                                                        readOnly
-                                                        className="w-10 h-8 text-center border-x border-gray-300 text-sm text-gray-900 focus:outline-none"
+                                    {cart.length === 0 ? (
+                                        <p className="text-center text-gray-500">Your cart is empty</p>
+                                    ) : (
+                                        cart.map((item) => (
+                                            <div key={`${item.productId}-${item.color}-${item.size}`} className="flex gap-4">
+                                                {/* Image */}
+                                                <div className="flex-shrink-0 w-24 h-32 bg-gray-100 overflow-hidden">
+                                                    <Image
+                                                        // src={item.image || 'https://colourrose.shop/wp-content/uploads/2025/06/P-1452-1.jpg'}
+                                                        src='https://colourrose.shop/wp-content/uploads/2025/06/P-1452-1.jpg'
+                                                        alt={item.name}
+                                                        width={96}
+                                                        height={128}
+                                                        className="object-cover w-full h-full"
                                                     />
-                                                    <button
-                                                        onClick={() => setQuantity(quantity + 1)}
-                                                        className="w-8 h-8 flex items-center justify-center text-gray-600 hover:bg-gray-50"
-                                                    >
-                                                        <Plus className="h-3 w-3" />
-                                                    </button>
                                                 </div>
-                                                <p className="text-sm md:text-lg font-semibold text-gray-900">
-                                                    {product.price.toFixed(2)}৳
-                                                </p>
+
+                                                {/* Details */}
+                                                <div className="flex-1 flex flex-col">
+                                                    <div className="flex justify-between  items-start mb-2">
+                                                        <div>
+                                                            <h3 className="font-medium text-gray-900 text-sm">{item.name}</h3>
+                                                            <p className="text-xs text-gray-500 mt-1">SKU: {item.sku}</p>
+                                                        </div>
+
+                                                        <button
+                                                            onClick={() =>
+                                                                removeItem(item.productId, item.color, item.size)
+                                                            }
+                                                            className="text-gray-400 hover:text-red-500 transition-colors"
+                                                        >
+                                                            <Trash2 className="h-4 w-4" />
+                                                        </button>
+                                                    </div>
+
+
+                                                    {/* Variants */}
+                                                    <div className="text-xs text-gray-600 space-y-1 mb-3">
+                                                        <p>
+                                                            Color: <span className="font-medium text-gray-900">{item.color}</span>
+                                                        </p>
+                                                        <p>
+                                                            Size: <span className="font-medium text-gray-900">{item.size}</span>
+                                                        </p>
+                                                    </div>
+
+                                                    {/* Quantity & Price */}
+                                                    <div className="flex items-center justify-between mt-auto gap-2 md:gap-0">
+                                                        <div className="flex items-center border border-gray-300">
+                                                            <button
+                                                                onClick={() =>
+                                                                    updateQty(
+                                                                        item.productId,
+                                                                        item.color,
+                                                                        item.size,
+                                                                        item.quantity - 1
+                                                                    )
+                                                                }
+                                                                className="w-8 h-8 flex items-center justify-center text-gray-600 hover:bg-gray-50"
+                                                            >
+                                                                <Minus size={12} />
+                                                            </button>
+
+                                                            <input
+                                                                type="text"
+                                                                value={item.quantity}
+                                                                readOnly
+                                                                className="w-10 h-8 text-center border-x border-gray-300 text-sm text-gray-900 focus:outline-none"
+                                                            />
+
+                                                            <button
+                                                                onClick={() => {
+                                                                    if (item.quantity >= item.stock) {
+                                                                        Swal.fire({
+                                                                            icon: "warning",
+                                                                            title: "Stock limit reached",
+                                                                            text: `Only ${item.stock} item(s) available`,
+                                                                        });
+                                                                        return;
+                                                                    }
+                                                                    updateQty(
+                                                                        item.productId,
+                                                                        item.color,
+                                                                        item.size,
+                                                                        item.quantity + 1
+                                                                    )
+                                                                }
+                                                                }
+                                                                className="w-8 h-8 flex items-center justify-center text-gray-600 hover:bg-gray-50"
+                                                            >
+                                                                <Plus size={12} />
+                                                            </button>
+                                                        </div>
+
+                                                        <p className="text-sm md:text-lg font-semibold text-gray-900">
+                                                            {(item.price * item.quantity).toFixed(2)}৳
+                                                        </p>
+                                                    </div>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </div>
+                                        ))
+                                    )}
                                 </div>
+
 
                                 {/*================ Cart Summary =================*/}
                                 <div className="border-t border-gray-100 p-6 bg-gray-50 flex-shrink-0 space-y-4">

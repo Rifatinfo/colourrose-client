@@ -1,15 +1,15 @@
 import ProductPage from "@/components/modules/ProductViewDetails/ProductPage";
 
 interface PageProps {
-  params: {
+  params: Promise<{
     category: string;
     subCategory: string;
     slug: string;
-  };
+  }>;
 }
 
 const ProductDetailsPage = async ({ params }: PageProps) => {
-  const { slug } = params;
+  const { slug } = await params;
 
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/api/v1/product/slug/${slug}`,

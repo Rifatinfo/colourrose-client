@@ -6,11 +6,12 @@ import { useSyncExternalStore } from "react";
 type Props = {
     cartCount: number;
     isMobileMenuOpen: boolean;
+    openDrawer: (mode?: "SHOP" | "PICKUP") => void;  
 };
 
 const emptySubscribe = () => () => { };
 
-export default function CartButton({ cartCount, isMobileMenuOpen }: Props) {
+export default function CartButton({ cartCount, isMobileMenuOpen, openDrawer }: Props) {
     const isHydrated = useSyncExternalStore(
         emptySubscribe,
         () => true,
@@ -19,8 +20,9 @@ export default function CartButton({ cartCount, isMobileMenuOpen }: Props) {
 
     return (
         <button
+            onClick={() => openDrawer("SHOP")}
             aria-label="Shopping cart"
-            className="relative p-2 hover:text-gold transition-colors duration-200"
+            className="cursor-pointer relative p-2 hover:text-gold transition-colors duration-200"
         >
             <ShoppingCart strokeWidth={2} className="w-6 h-6" />
 

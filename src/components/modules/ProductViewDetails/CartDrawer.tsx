@@ -159,7 +159,7 @@ export function CartDrawer({ isOpen, onClose, mode }: CartDrawerProps) {
                                     <div className="space-y-2">
                                         <div className="flex justify-between text-sm text-gray-600">
                                             <p>Subtotal</p>
-                                            <p>{subtotal.toFixed(2)}৳</p>
+                                            <p>{subtotal.toFixed(2)}TK</p>
                                         </div>
                                         <div className="flex justify-between text-sm text-gray-600">
                                             <p>Shipping</p>

@@ -7,7 +7,6 @@ import {
   Menu,
   X,
   ChevronDown,
-  ShoppingCart,
   Heart,
 } from "lucide-react";
 import {
@@ -25,6 +24,8 @@ import { menuData } from "./menu-item";
 import WhiteLogo from "../Logo/WhiteLogo";
 import { usePathname } from "next/navigation";
 import BlackLogo from "../Logo/BlackLogo";
+import { useCart } from "@/context/CartContext";
+import CartButton from "./CartButton";
 
 export function Navbar() {
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
@@ -32,7 +33,7 @@ export function Navbar() {
   const [expandedMobileCategory, setExpandedMobileCategory] = useState<
     string | null
   >(null);
-
+  const { cartCount } = useCart();
   const pathname = usePathname();
   const isHome = pathname === "/";
 
@@ -101,9 +102,8 @@ export function Navbar() {
 
             {/*==================== Desktop Menu ===================== */}
             <nav
-              className={`hidden md:flex items-center space-x-12 h-full ${
-                isHome ? "text-white" : "text-black"
-              }`}
+              className={`hidden md:flex items-center space-x-12 h-full ${isHome ? "text-white" : "text-black"
+                }`}
             >
               {navItems.map((item) => (
                 <div
@@ -112,9 +112,8 @@ export function Navbar() {
                   onMouseEnter={() => setActiveCategory(item)}
                 >
                   <button
-                    className={`text-sm uppercase tracking-widest hover:text-gold transition-colors duration-300 flex items-center gap-1 ${
-                      activeCategory === item ? "text-gold" : ""
-                    }`}
+                    className={`text-sm uppercase tracking-widest hover:text-gold transition-colors duration-300 flex items-center gap-1 ${activeCategory === item ? "text-gold" : ""
+                      }`}
                   >
                     {item}
                     {activeCategory === item && (
@@ -130,7 +129,7 @@ export function Navbar() {
 
             {/*==================== Icons ===================== */}
             <div
-              className="hidden md:flex items-center space-x-6 z-50 font-semibold"
+              className="hidden md:flex items-center space-x-4 z-50 font-semibold"
               style={{ color: isHome ? "white" : "black" }}
             >
               <button className="hover:text-gold transition-colors">
@@ -139,10 +138,9 @@ export function Navbar() {
               <button className="hover:text-gold transition-colors">
                 <User strokeWidth={2} className="w-6 h-6" />
               </button>
-              <button className="hover:text-gold transition-colors relative">
-                <ShoppingCart strokeWidth={2} className="w-6 h-6" />
-                <span className="absolute -top-1 -right-1 w-2 h-2 bg-gold rounded-full" />
-              </button>
+             
+               <CartButton cartCount={cartCount} isMobileMenuOpen={isMobileMenuOpen} />
+
               <button className="hover:text-gold transition-colors relative">
                 <Heart strokeWidth={2} className="w-6 h-6" />
                 <span className="absolute -top-1 -right-1 w-2 h-2 bg-gold rounded-full" />
@@ -195,9 +193,8 @@ export function Navbar() {
             <div className="pt-24 pb-12 px-6">
               {/* Mobile Icons */}
               <div
-                className={`flex items-center justify-end space-x-6 mb-8 pb-6 border-b border-gray-200 font-semibold ${
-                  isHome ? "text-white" : "text-white"
-                }`}
+                className={`flex items-center justify-end space-x-6 mb-8 pb-6 border-b border-gray-200 font-semibold ${isHome ? "text-white" : "text-white"
+                  }`}
               >
                 <button className="hover:text-gold transition-colors">
                   <Search strokeWidth={2} className="w-6 h-6" />
@@ -205,10 +202,7 @@ export function Navbar() {
                 <button className="hover:text-gold transition-colors">
                   <User strokeWidth={2} className="w-6 h-6" />
                 </button>
-                <button className="hover:text-gold transition-colors relative">
-                  <ShoppingCart strokeWidth={2} className="w-6 h-6" />
-                  <span className="absolute -top-1 -right-1 w-2 h-2 bg-gold rounded-full" />
-                </button>
+                <CartButton cartCount={cartCount} isMobileMenuOpen={isMobileMenuOpen} />
                 <button className="hover:text-gold transition-colors relative">
                   <Heart strokeWidth={2} className="w-6 h-6" />
                   <span className="absolute -top-1 -right-1 w-2 h-2 bg-gold rounded-full" />

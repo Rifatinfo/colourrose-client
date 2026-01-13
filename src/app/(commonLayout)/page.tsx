@@ -7,7 +7,7 @@ const HomePage = () => {
     return (
         <div>
            <Hero />
-           <BestSellersSection/>
+           {/* <BestSellersSection/> */}
            <CategorySection/>
            <CollectionSection/>
         </div>

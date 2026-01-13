@@ -15,7 +15,7 @@ import { motion } from 'framer-motion';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import Swal from 'sweetalert2';
 import { useCart } from '@/context/CartContext';
-// import { useFettie } from '@/hooks/use-confetti';
+import { useCartDrawer } from '@/context/CartDrawerContext';
 
 interface Product {
     id: string;
@@ -33,17 +33,13 @@ interface Product {
 
 interface ProductInfoProps {
     product: Product;
-    onShopNow: () => void;
-    onPickup: () => void;
 }
-export function ProductInfo({ product,
-    onShopNow,
-    onPickup, }: ProductInfoProps) {
+export function ProductInfo({ product }: ProductInfoProps) {
     const [quantity, setQuantity] = useState(1)
     const [selectedSize, setSelectedSize] = useState<string | undefined>(undefined);
     const [selectedColor, setSelectedColor] = useState<string | undefined>(undefined);
     const { addToCart } = useCart();
-    // const { run } = useFettie();
+    const { openDrawer } = useCartDrawer();    // const { run } = useFettie();
 
     const sizes = Array.from(
         new Set(product.variants.map(v => v.size))
@@ -255,7 +251,7 @@ export function ProductInfo({ product,
                     </div>
 
                     {/*=============== Add to Cart ================== */}
- 
+
                     <button
                         onClick={() => {
                             if (!selectedColor) {
@@ -283,12 +279,13 @@ export function ProductInfo({ product,
                                 image: product.images[0]?.url || "",
                                 color: selectedColor!,
                                 size: selectedSize!,
-                                quantity, // ✅ USE UI QUANTITY
+                                quantity, // USE UI QUANTITY
                                 stock,
                             });
 
                             // Reset quantity if you want
                             setQuantity(1);
+                            openDrawer("SHOP");
                         }}
                         className="flex-1 bg-black text-white h-12 px-8 py-4 flex items-center justify-center gap-2 cursor-pointer transition-colors uppercase tracking-wider text-sm font-medium"
                     >
@@ -334,8 +331,23 @@ export function ProductInfo({ product,
                                 });
                                 return;
                             }
+                            //  1. ADD TO CART (SAVED IN LOCALSTORAGE)
+                            addToCart({
+                                productId: product.id,
+                                name: product.name,
+                                sku: product.sku,
+                                price: product.salePrice,
+                                image: product.images[0]?.url || "",
+                                color: selectedColor,
+                                size: selectedSize,
+                                quantity,
+                                stock,
+                            });
+
                             //================= All checks passed =================//
-                            onShopNow();
+                            //  2. OPEN CART DRAWER
+                            openDrawer("SHOP");
+                           
                         }}
 
                         className="w-full sm:w-auto bg-black text-white h-12 px-6 sm:px-8 flex items-center justify-center gap-2 transition-all shadow-md hover:shadow-lg uppercase tracking-wider text-sm font-bold cursor-pointer"
@@ -346,7 +358,7 @@ export function ProductInfo({ product,
 
                     {/*================== Store Pickup Button =================*/}
                     <button
-                        onClick={onPickup}
+                        onClick={() => openDrawer("PICKUP")}
                         className="w-full sm:w-auto border-2 border-black text-black h-12 px-6 sm:px-8 flex items-center justify-center gap-2 transition-colors uppercase tracking-wider text-sm font-bold cursor-pointer"
                     >
                         <Store className="h-4 w-4" />

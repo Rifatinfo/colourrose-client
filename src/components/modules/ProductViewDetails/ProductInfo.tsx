@@ -14,13 +14,16 @@ import {
 import { motion } from 'framer-motion';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import Swal from 'sweetalert2';
+import { useCart } from '@/context/CartContext';
+// import { useFettie } from '@/hooks/use-confetti';
 
 interface Product {
     id: string;
     name: string;
     salePrice: number;
     sku: string;
-    image: string;
+    // image: string[];
+    images: Array<{ url: string }>;
     color: string;
     size: string;
     shortDescription: string;
@@ -39,6 +42,8 @@ export function ProductInfo({ product,
     const [quantity, setQuantity] = useState(1)
     const [selectedSize, setSelectedSize] = useState<string | undefined>(undefined);
     const [selectedColor, setSelectedColor] = useState<string | undefined>(undefined);
+    const { addToCart } = useCart();
+    // const { run } = useFettie();
 
     const sizes = Array.from(
         new Set(product.variants.map(v => v.size))
@@ -250,45 +255,47 @@ export function ProductInfo({ product,
                     </div>
 
                     {/*=============== Add to Cart ================== */}
+ 
                     <button
                         onClick={() => {
                             if (!selectedColor) {
-                                Swal.fire({
-                                    icon: "warning",
-                                    title: "Please select a color first",
-                                });
+                                Swal.fire({ icon: "warning", title: "Please select a color first" });
                                 return;
                             }
                             if (!selectedSize) {
-                                Swal.fire({
-                                    icon: "warning",
-                                    title: "Please select a size first",
-                                });
+                                Swal.fire({ icon: "warning", title: "Please select a size first" });
                                 return;
                             }
-
                             if (stock === 0) {
-                                Swal.fire({
-                                    icon: "error",
-                                    title: "OUT OF STOCK",
-                                    text: "This product is currently unavailable",
-                                });
+                                Swal.fire({ icon: "error", title: "OUT OF STOCK", text: "This product is currently unavailable" });
+                                return;
+                            }
+                            if (quantity > stock) {
+                                Swal.fire({ icon: "error", title: "LIMIT EXCEEDED", text: `Only ${stock} item(s) available` });
                                 return;
                             }
 
-                            if (quantity > stock) {
-                                Swal.fire({
-                                    icon: "error",
-                                    title: "LIMIT EXCEEDED",
-                                    text: `Only ${stock} item(s) available`,
-                                });
-                                return;
-                            }
+                            addToCart({
+                                productId: product.id,
+                                name: product.name,
+                                sku: product.sku,
+                                price: product.salePrice,
+                                image: product.images[0]?.url || "",
+                                color: selectedColor!,
+                                size: selectedSize!,
+                                quantity, // ✅ USE UI QUANTITY
+                                stock,
+                            });
+
+                            // Reset quantity if you want
+                            setQuantity(1);
                         }}
-                        className="flex-1 bg-black text-white h-12 px-8 py-4 flex items-center justify-center gap-2 cursor-pointer transition-colors uppercase tracking-wider text-sm font-medium" >
+                        className="flex-1 bg-black text-white h-12 px-8 py-4 flex items-center justify-center gap-2 cursor-pointer transition-colors uppercase tracking-wider text-sm font-medium"
+                    >
                         <ShoppingBag className="h-4 w-4" />
                         Add to Cart
                     </button>
+
                 </div>
 
                 <div className="flex flex-col sm:flex-row items-center justify-between gap-4 w-full">
@@ -330,7 +337,7 @@ export function ProductInfo({ product,
                             //================= All checks passed =================//
                             onShopNow();
                         }}
-                        
+
                         className="w-full sm:w-auto bg-black text-white h-12 px-6 sm:px-8 flex items-center justify-center gap-2 transition-all shadow-md hover:shadow-lg uppercase tracking-wider text-sm font-bold cursor-pointer"
                     >
                         <Zap className="h-4 w-4" />

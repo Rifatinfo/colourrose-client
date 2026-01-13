@@ -104,7 +104,7 @@ export function CartDrawer({ isOpen, onClose, mode }: CartDrawerProps) {
 
                                                 {/* Details */}
                                                 <div className="flex-1 flex flex-col">
-                                                    <div className="flex justify-between  items-start mb-2">
+                                                    <div className="flex justify-between items-start mb-2">
                                                         <div>
                                                             <h3 className="font-medium text-gray-900 text-sm">{item.name}</h3>
                                                             <p className="text-xs text-gray-500 mt-1">SKU: {item.sku}</p>
@@ -114,7 +114,7 @@ export function CartDrawer({ isOpen, onClose, mode }: CartDrawerProps) {
                                                             onClick={() =>
                                                                 removeItem(item.productId, item.color, item.size)
                                                             }
-                                                            className="text-gray-400 hover:text-red-500 transition-colors"
+                                                            className="text-gray-400 cursor-pointer hover:text-red-500 transition-colors"
                                                         >
                                                             <Trash2 className="h-4 w-4" />
                                                         </button>
@@ -180,7 +180,7 @@ export function CartDrawer({ isOpen, onClose, mode }: CartDrawerProps) {
                                                         </div>
 
                                                         <p className="text-sm md:text-lg font-semibold text-gray-900">
-                                                            {(item.price * item.quantity).toFixed(2)}৳
+                                                            {(item.price * item.quantity).toFixed(2)}TK
                                                         </p>
                                                     </div>
                                                 </div>
@@ -203,7 +203,7 @@ export function CartDrawer({ isOpen, onClose, mode }: CartDrawerProps) {
                                         </div>
                                         <div className="flex justify-between text-base font-bold text-gray-900 pt-2 border-t border-gray-200">
                                             <p>Total</p>
-                                            <p>{subtotal.toFixed(2)}৳</p>
+                                            <p>{subtotal.toFixed(2)}TK</p>
                                         </div>
                                     </div>
 

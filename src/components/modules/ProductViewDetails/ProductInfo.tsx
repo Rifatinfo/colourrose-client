@@ -283,7 +283,7 @@ export function ProductInfo({ product }: ProductInfoProps) {
                                 stock,
                             });
 
-                            // Reset quantity if you want
+                            // Reset quantity
                             setQuantity(1);
                             openDrawer("SHOP");
                         }}
@@ -343,9 +343,9 @@ export function ProductInfo({ product }: ProductInfoProps) {
                                 quantity,
                                 stock,
                             });
-
                             //================= All checks passed =================//
                             //  2. OPEN CART DRAWER
+                            setQuantity(1); // Reset quantity
                             openDrawer("SHOP");
                            
                         }}

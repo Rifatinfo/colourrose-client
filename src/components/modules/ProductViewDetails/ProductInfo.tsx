@@ -16,6 +16,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import Swal from 'sweetalert2';
 import { useCart } from '@/context/CartContext';
 import { useCartDrawer } from '@/context/CartDrawerContext';
+import { useFettie } from '@/hooks/use-confetti';
 
 interface Product {
     id: string;
@@ -39,8 +40,8 @@ export function ProductInfo({ product }: ProductInfoProps) {
     const [selectedSize, setSelectedSize] = useState<string | undefined>(undefined);
     const [selectedColor, setSelectedColor] = useState<string | undefined>(undefined);
     const { addToCart } = useCart();
-    const { openDrawer } = useCartDrawer();    // const { run } = useFettie();
-
+    const { openDrawer } = useCartDrawer();   
+    const { run } = useFettie();
     const sizes = Array.from(
         new Set(product.variants.map(v => v.size))
     );
@@ -282,10 +283,9 @@ export function ProductInfo({ product }: ProductInfoProps) {
                                 quantity, // USE UI QUANTITY
                                 stock,
                             });
-
+                            run(); // Trigger confetti animation
                             // Reset quantity
                             setQuantity(1);
-                            openDrawer("SHOP");
                         }}
                         className="flex-1 bg-black text-white h-12 px-8 py-4 flex items-center justify-center gap-2 cursor-pointer transition-colors uppercase tracking-wider text-sm font-medium"
                     >

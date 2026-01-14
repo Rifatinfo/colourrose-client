@@ -13,7 +13,7 @@ import Image from "next/image";
 
 export function PaymentOptions() {
   const [method, setMethod] = useState<"online" | "cod">("online");
-
+   
   return (
     <Card className="mb-8 rounded-none shadow-2xl">
       <CardHeader>

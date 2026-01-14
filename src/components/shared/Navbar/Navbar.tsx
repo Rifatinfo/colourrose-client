@@ -142,7 +142,10 @@ export function Navbar() {
                 <User strokeWidth={2} className="w-6 h-6" />
               </button>
              
-               <CartButton openDrawer={openDrawer} cartCount={cartCount} isMobileMenuOpen={isMobileMenuOpen} />
+               <CartButton 
+               openDrawer={openDrawer} 
+               cartCount={cartCount} 
+               isMobileMenuOpen={isMobileMenuOpen} />
 
               <button className="hover:text-gold transition-colors relative">
                 <Heart strokeWidth={2} className="w-6 h-6" />

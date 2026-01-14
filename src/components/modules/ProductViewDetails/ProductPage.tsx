@@ -5,7 +5,7 @@ import ProductImageGallery from './ProductImageGallery';
 import { ProductInfo } from './ProductInfo';
 import ProductTabs from './ProductTabs';
 import RelatedProducts from '@/components/shared/RelatedProduct/RelatedProducts';
-import { CartDrawer } from './CartDrawer';
+import { CartDrawer } from '../card/CartDrawer';
 import Breadcrumb from '@/components/shared/Breadcrumb/Breadcrumb';
 import { useCartDrawer } from '@/context/CartDrawerContext';
 

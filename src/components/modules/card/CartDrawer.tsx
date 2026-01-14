@@ -5,25 +5,11 @@ import { motion, AnimatePresence } from 'framer-motion'
 import Image from 'next/image';
 import { useCart } from '@/context/CartContext';
 import Swal from 'sweetalert2';
+import { useCartDrawer } from '@/context/CartDrawerContext';
 
-interface Product {
-    id: string;
-    name: string;
-    price: number;
-    sku: string;
-    image: string;
-    color: string;
-    size: string;
-}
 
-interface CartDrawerProps {
-    isOpen: boolean
-    onClose: () => void,
-    mode: "SHOP" | "PICKUP";
-    product: Product;
-}
-export function CartDrawer({ isOpen, onClose, mode }: CartDrawerProps) {
-
+export function CartDrawer() {
+    const { isOpen, closeDrawer, mode } = useCartDrawer();
     const { cart, updateQty, removeItem } = useCart();
     const subtotal = cart.reduce(
         (sum, item) => sum + item.price * item.quantity,
@@ -45,7 +31,7 @@ export function CartDrawer({ isOpen, onClose, mode }: CartDrawerProps) {
                         exit={{
                             opacity: 0,
                         }}
-                        onClick={onClose}
+                        onClick={closeDrawer}
                         className="fixed inset-0 bg-black/40 z-50 backdrop-blur-sm"
                     />
 
@@ -67,15 +53,15 @@ export function CartDrawer({ isOpen, onClose, mode }: CartDrawerProps) {
                         }}
                         className="fixed inset-y-0 right-0 z-50 w-full max-w-md bg-white shadow-2xl flex flex-col"
                     >
-                        {/* Header */}
+                        {/*=================== Header ===================*/}
                         <div className="flex items-center justify-between p-4 border-b border-gray-100">
                             <h2 className="text-lg font-medium text-gray-900 flex items-center gap-2">
                                 <ShoppingBag className="h-5 w-5" />
                                 {mode === "SHOP" ? "Shopping Cart" : "Store Pickup"}
                             </h2>
                             <button
-                                onClick={onClose}
-                                className="p-2 -mr-2 text-gray-400 hover:text-gray-600 transition-colors rounded-full hover:bg-gray-50"
+                                onClick={closeDrawer}
+                                className="p-2 -mr-2 text-gray-400 hover:text-gray-600 transition-colors rounded-full hover:bg-gray-50 cursor-pointer"
                             >
                                 <X className="h-6 w-6" />
                             </button>
@@ -216,7 +202,7 @@ export function CartDrawer({ isOpen, onClose, mode }: CartDrawerProps) {
                                             <ArrowRight className="ml-2 h-4 w-4 md:h-5 md:w-5" />
                                         </button>
                                         <button
-                                            onClick={onClose}
+                                            onClick={closeDrawer}
                                             className="w-full text-center text-sm text-gray-600 hover:text-gray-900 transition-colors"
                                         >
                                             Continue Shopping

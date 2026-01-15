@@ -41,7 +41,7 @@ export function ProductInfo({ product }: ProductInfoProps) {
     const [selectedColor, setSelectedColor] = useState<string | undefined>(undefined);
     const { addToCart } = useCart();
     const { openDrawer } = useCartDrawer();   
-    const { run } = useFettie();
+    // const { run } = useFettie();
     const sizes = Array.from(
         new Set(product.variants.map(v => v.size))
     );
@@ -283,7 +283,7 @@ export function ProductInfo({ product }: ProductInfoProps) {
                                 quantity, // USE UI QUANTITY
                                 stock,
                             });
-                            run(); // Trigger confetti animation
+                            // run(); // Trigger confetti animation
                             // Reset quantity
                             setQuantity(1);
                         }}

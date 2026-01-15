@@ -35,7 +35,7 @@ export function Navbar() {
     string | null
   >(null);
   const { openDrawer } = useCartDrawer();
-
+  
   const { cartCount } = useCart();
   const pathname = usePathname();
   const isHome = pathname === "/";

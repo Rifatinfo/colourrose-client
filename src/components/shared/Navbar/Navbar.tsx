@@ -27,6 +27,7 @@ import BlackLogo from "../Logo/BlackLogo";
 import { useCart } from "@/context/CartContext";
 import CartButton from "./CartButton";
 import { useCartDrawer } from "@/context/CartDrawerContext";
+import WishlistCount from "./WishlistCount";
 
 export function Navbar() {
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
@@ -35,7 +36,7 @@ export function Navbar() {
     string | null
   >(null);
   const { openDrawer } = useCartDrawer();
-  
+
   const { cartCount } = useCart();
   const pathname = usePathname();
   const isHome = pathname === "/";
@@ -141,16 +142,13 @@ export function Navbar() {
               <button className="hover:text-gold transition-colors">
                 <User strokeWidth={2} className="w-6 h-6" />
               </button>
-             
-               <CartButton 
-               openDrawer={openDrawer} 
-               cartCount={cartCount} 
-               isMobileMenuOpen={isMobileMenuOpen} />
 
-              <button className="hover:text-gold transition-colors relative">
-                <Heart strokeWidth={2} className="w-6 h-6" />
-                <span className="absolute -top-1 -right-1 w-2 h-2 bg-gold rounded-full" />
-              </button>
+              <CartButton
+                openDrawer={openDrawer}
+                cartCount={cartCount}
+                isMobileMenuOpen={isMobileMenuOpen} />
+
+              <WishlistCount isMobileMenuOpen={isMobileMenuOpen} />
             </div>
 
             {/* ==================== Mobile Menu Button ==================== */}
@@ -209,10 +207,8 @@ export function Navbar() {
                   <User strokeWidth={2} className="w-6 h-6" />
                 </button>
                 <CartButton openDrawer={openDrawer} cartCount={cartCount} isMobileMenuOpen={isMobileMenuOpen} />
-                <button className="hover:text-gold transition-colors relative">
-                  <Heart strokeWidth={2} className="w-6 h-6" />
-                  <span className="absolute -top-1 -right-1 w-2 h-2 bg-gold rounded-full" />
-                </button>
+                <WishlistCount isMobileMenuOpen={isMobileMenuOpen} />
+
               </div>
 
               {/* Mobile Mega Menu Accordion */}

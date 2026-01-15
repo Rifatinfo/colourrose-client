@@ -3,16 +3,29 @@
 import Image from "next/image";
 import { X } from "lucide-react";
 import { useWishlist } from "@/context/WishlistContext";
-
-
+import { useSyncExternalStore } from "react";
+// import SelectOptionsButton from "./SelectOptionsButton";
 
 const WishlistTable = () => {
-      const { wishlist, removeFromWishlist } = useWishlist();
-      if (wishlist.length === 0) {
-      return <p className="text-center py-10">Wishlist is empty</p>;
-       }
+  const { wishlist, removeFromWishlist } = useWishlist();
+  console.log("Wishlist items:", wishlist);
+  //  Ensure same HTML on server & client
+  const mounted = useSyncExternalStore(
+    () => () => { },
+    () => true,
+    () => false
+  );
+
+  //  Prevent hydration mismatch
+  if (!mounted) return null;
+
+  // Empty state
+  if (wishlist.length === 0) {
+    return <p className="text-center py-10">Your wishlist is empty</p>;
+  }
+
   return (
-    <div className="max-w-7xl mx-auto space-y-6 px-4 sm:px-6 lg:px-8 mt-10">
+    <div className="space-y-6 px-4 lg:px-10 mt-10">
       {/* ================= DESKTOP TABLE ================= */}
       <div className="hidden lg:block">
         {/* Header */}
@@ -25,13 +38,13 @@ const WishlistTable = () => {
         </div>
 
         {/* Rows */}
-        {wishlist?.map((item) => (
+        {wishlist.map((item) => (
           <div
             key={item.productId}
             className="grid grid-cols-[80px_1fr_200px_200px_200px] items-center border-b py-6"
           >
             <button
-               onClick={() => removeFromWishlist(item.productId)}
+              onClick={() => removeFromWishlist(item.productId)}
               className="flex items-center justify-center bg-black text-white h-8 w-8 rounded-full border cursor-pointer"
             >
               <X size={18} />
@@ -46,49 +59,45 @@ const WishlistTable = () => {
                   className="object-cover"
                 />
               </div>
-              <h3 className="text-xl tracking-wide uppercase">{item.name}</h3>
+              <h3 className="tracking-wide uppercase">
+                {item.name}
+              </h3>
             </div>
 
-            <div className="text-xl">{item.price.toLocaleString()} TK</div>
+            <div className="">{item.price} TK</div>
 
-            <div className="text-xl uppercase tracking-wide text-gray-500">
-              {item.stockStatus ? "In stock" : "Out of stock"}
+            <div className="uppercase tracking-wide text-gray-500">
+              {/* {item.stockStatus > 0 ? "In stock" : "Out of stock"} */}
+              {item.stock > 0 ? "In stock" : "Out of stock"}
             </div>
 
             <button className="group relative bg-black px-8 py-3 text-xs tracking-widest text-white overflow-hidden">
               <span className="relative z-10">SELECT OPTIONS</span>
               <span className="absolute bottom-2 left-1/2 h-[1px] w-0 bg-white transition-all duration-300 group-hover:w-[70%] group-hover:left-[15%]" />
             </button>
+
+            {/* <SelectOptionsButton productId={item.productId} /> */}
+
           </div>
         ))}
       </div>
 
-      {/* ================= MOBILE / TABLET CARDS ================= */}
+      {/* ================= MOBILE / TABLET ================= */}
       <div className="space-y-6 lg:hidden">
-        {wishlist?.map((item) => (
+        {wishlist.map((item) => (
           <div
             key={item.productId}
             className="relative border p-4 rounded-md space-y-4"
           >
-            {/* Remove */}
             <button
-               onClick={() => removeFromWishlist(item.productId)}
-              className="
-                absolute top-2 right-2
-                flex items-center justify-center
-                bg-black text-white
-                h-8 w-8 rounded-full
-                border cursor-pointer
-                transition hover:bg-red-600
-                lg:hidden 
-              "
-              aria-label="Remove item"
+              onClick={() => removeFromWishlist(item.productId)}
+              className="absolute top-2 right-2 flex items-center justify-center bg-black text-white h-8 w-8 rounded-full border"
             >
               <X size={18} />
             </button>
-            {/* Product */}
+
             <div className="flex gap-4">
-              <div className="relative h-32 w-24 overflow-hidden flex-shrink-0">
+              <div className="relative h-32 w-24 overflow-hidden">
                 <Image
                   src="https://colourrose.shop/wp-content/uploads/2024/11/2-19-300x300.jpg"
                   alt={item.name}
@@ -98,19 +107,21 @@ const WishlistTable = () => {
               </div>
 
               <div className="space-y-2">
-                <h3 className="text-sm font-medium uppercase">{item.name}</h3>
-                <p className="text-sm">{item.price.toLocaleString()} TK</p>
-                <p className="text-xs uppercase ">
-                  {item.stockStatus ? "In stock" : "Out of stock"}
+                <h3 className="text-sm font-medium uppercase">
+                  {item.name}
+                </h3>
+                <p className="text-sm">{item.price} TK</p>
+                <p className="text-xs uppercase">
+                  {item.stock > 0 ? "In stock" : "Out of stock"}
                 </p>
               </div>
             </div>
 
-            {/* Button */}
-            <button className="w-full group relative bg-black py-3 text-xs tracking-widest text-white overflow-hidden">
-              <span className="relative z-10">SELECT OPTIONS</span>
-              <span className="absolute bottom-2 left-1/2 h-[1px] w-0 bg-white transition-all duration-300 group-hover:w-[60%] group-hover:left-[20%]" />
+            <button className="cursor-pointer w-full bg-black py-3 text-xs tracking-widest text-white">
+              SELECT OPTIONS
             </button>
+            {/* Select Options */}
+            {/* <SelectOptionsButton productId={item.productId} /> */}
           </div>
         ))}
       </div>

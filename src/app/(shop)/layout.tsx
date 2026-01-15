@@ -12,3 +12,5 @@ const ShopLayout = ({ children }: { children: React.ReactNode }) => {
 };
 
 export default ShopLayout;
+
+

@@ -1,6 +1,7 @@
 
 'use client';
 
+import { useFettie } from '@/hooks/use-confetti';
 import { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import Swal from 'sweetalert2';
 
@@ -29,6 +30,7 @@ const CartContext = createContext<CartContextType | null>(null);
 const isClient = typeof window !== 'undefined';
 
 export const CartProvider = ({ children }: { children: React.ReactNode }) => {
+    const { run } = useFettie();
     const [cart, setCart] = useState<CartItem[]>(() => {
         if (!isClient) return [];
         try {
@@ -48,7 +50,7 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
     /*===================== Add to Cart =====================*/
     const addToCart = (item: CartItem) => {
         setCart((prev) => {
-            //======================== Block out-of-stock items============
+            //======================== Block out-of-stock items============//
             if (item.stock === 0) {
                 Swal.fire({
                     icon: "error",
@@ -58,17 +60,17 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
                 return prev;
             }
 
-            //======================== Find if product already exists in cart (same color + size)============
+            //======================== Find if product already exists in cart (same color + size)============//
             const exist = prev.find(
                 (p) =>
                     p.productId === item.productId &&
                     p.color === item.color &&
                     p.size === item.size
             );
-
+            
             if (exist) {
                 const newQty = exist.quantity + item.quantity;
-
+           
                 // Prevent exceeding stock
                 if (newQty > item.stock) {
                     Swal.fire({
@@ -78,13 +80,14 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
                     });
                     return prev;
                 }
-
+                run();
                 // Update existing item with correct quantity
                 return prev.map((p) =>
                     p === exist ? { ...p, quantity: newQty } : p
                 );
+                
             }
-
+             run();
             // Add new item
             return [...prev, item];
         });

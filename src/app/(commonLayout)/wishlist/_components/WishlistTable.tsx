@@ -2,21 +2,15 @@
 
 import Image from "next/image";
 import { X } from "lucide-react";
+import { useWishlist } from "@/context/WishlistContext";
 
-export type WishlistItem = {
-  id: string;
-  title: string;
-  price: number;
-  image: string;
-  stock: "in_stock" | "out_of_stock";
-};
 
-type Props = {
-  items: WishlistItem[];
-  onRemove?: (id: string) => void;
-};
 
-const WishlistTable = ({ items, onRemove }: Props) => {
+const WishlistTable = () => {
+      const { wishlist, removeFromWishlist } = useWishlist();
+      if (wishlist.length === 0) {
+      return <p className="text-center py-10">Wishlist is empty</p>;
+       }
   return (
     <div className="max-w-7xl mx-auto space-y-6 px-4 sm:px-6 lg:px-8 mt-10">
       {/* ================= DESKTOP TABLE ================= */}
@@ -31,13 +25,13 @@ const WishlistTable = ({ items, onRemove }: Props) => {
         </div>
 
         {/* Rows */}
-        {items?.map((item) => (
+        {wishlist?.map((item) => (
           <div
-            key={item.id}
+            key={item.productId}
             className="grid grid-cols-[80px_1fr_200px_200px_200px] items-center border-b py-6"
           >
             <button
-              onClick={() => onRemove?.(item.id)}
+               onClick={() => removeFromWishlist(item.productId)}
               className="flex items-center justify-center bg-black text-white h-8 w-8 rounded-full border cursor-pointer"
             >
               <X size={18} />
@@ -47,18 +41,18 @@ const WishlistTable = ({ items, onRemove }: Props) => {
               <div className="relative h-28 w-20 overflow-hidden">
                 <Image
                   src="https://colourrose.shop/wp-content/uploads/2024/11/2-19-300x300.jpg"
-                  alt={item.title}
+                  alt={item.name}
                   fill
                   className="object-cover"
                 />
               </div>
-              <h3 className="text-xl tracking-wide uppercase">{item.title}</h3>
+              <h3 className="text-xl tracking-wide uppercase">{item.name}</h3>
             </div>
 
             <div className="text-xl">{item.price.toLocaleString()} TK</div>
 
             <div className="text-xl uppercase tracking-wide text-gray-500">
-              {item.stock === "in_stock" ? "In stock" : "Out of stock"}
+              {item.stockStatus ? "In stock" : "Out of stock"}
             </div>
 
             <button className="group relative bg-black px-8 py-3 text-xs tracking-widest text-white overflow-hidden">
@@ -71,14 +65,14 @@ const WishlistTable = ({ items, onRemove }: Props) => {
 
       {/* ================= MOBILE / TABLET CARDS ================= */}
       <div className="space-y-6 lg:hidden">
-        {items?.map((item) => (
+        {wishlist?.map((item) => (
           <div
-            key={item.id}
+            key={item.productId}
             className="relative border p-4 rounded-md space-y-4"
           >
             {/* Remove */}
             <button
-              onClick={() => onRemove?.(item.id)}
+               onClick={() => removeFromWishlist(item.productId)}
               className="
                 absolute top-2 right-2
                 flex items-center justify-center
@@ -97,17 +91,17 @@ const WishlistTable = ({ items, onRemove }: Props) => {
               <div className="relative h-32 w-24 overflow-hidden flex-shrink-0">
                 <Image
                   src="https://colourrose.shop/wp-content/uploads/2024/11/2-19-300x300.jpg"
-                  alt={item.title}
+                  alt={item.name}
                   fill
                   className="object-cover"
                 />
               </div>
 
               <div className="space-y-2">
-                <h3 className="text-sm font-medium uppercase">{item.title}</h3>
+                <h3 className="text-sm font-medium uppercase">{item.name}</h3>
                 <p className="text-sm">{item.price.toLocaleString()} TK</p>
-                <p className="text-xs uppercase text-green-600">
-                  {item.stock === "in_stock" ? "In stock" : "Out of stock"}
+                <p className="text-xs uppercase ">
+                  {item.stockStatus ? "In stock" : "Out of stock"}
                 </p>
               </div>
             </div>

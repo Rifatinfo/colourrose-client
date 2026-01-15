@@ -7,7 +7,7 @@ import ProductTabs from './ProductTabs';
 import RelatedProducts from '@/components/shared/RelatedProduct/RelatedProducts';
 import { CartDrawer } from '../card/CartDrawer';
 import Breadcrumb from '@/components/shared/Breadcrumb/Breadcrumb';
-import { useCartDrawer } from '@/context/CartDrawerContext';
+// import { useCartDrawer } from '@/context/CartDrawerContext';
 
 
 type ProductPageProps = {
@@ -15,7 +15,7 @@ type ProductPageProps = {
 };
 const ProductPage = ({ product }: ProductPageProps) => {
 
-    const { isOpen, mode, closeDrawer } = useCartDrawer();
+    // const { isOpen, mode, closeDrawer } = useCartDrawer();
 
     return (
         <div className="min-h-screen bg-white font-sans text-gray-900">
@@ -35,12 +35,7 @@ const ProductPage = ({ product }: ProductPageProps) => {
                 <RelatedProducts />
             </section>
 
-            <CartDrawer
-                isOpen={isOpen}
-                onClose={closeDrawer}
-                mode={mode}
-                product={product}
-            />
+            <CartDrawer/>
         </div>
     )
 }

@@ -17,6 +17,7 @@ import Swal from 'sweetalert2';
 import { useCart } from '@/context/CartContext';
 import { useCartDrawer } from '@/context/CartDrawerContext';
 import { useFettie } from '@/hooks/use-confetti';
+import WishlistButton from '@/components/shared/WishlistButton/WishlistButton';
 
 interface Product {
     id: string;
@@ -40,7 +41,7 @@ export function ProductInfo({ product }: ProductInfoProps) {
     const [selectedSize, setSelectedSize] = useState<string | undefined>(undefined);
     const [selectedColor, setSelectedColor] = useState<string | undefined>(undefined);
     const { addToCart } = useCart();
-    const { openDrawer } = useCartDrawer();   
+    const { openDrawer } = useCartDrawer();
     // const { run } = useFettie();
     const sizes = Array.from(
         new Set(product.variants.map(v => v.size))
@@ -347,7 +348,7 @@ export function ProductInfo({ product }: ProductInfoProps) {
                             //  2. OPEN CART DRAWER
                             setQuantity(1); // Reset quantity
                             openDrawer("SHOP");
-                           
+
                         }}
 
                         className="w-full sm:w-auto bg-black text-white h-12 px-6 sm:px-8 flex items-center justify-center gap-2 transition-all shadow-md hover:shadow-lg uppercase tracking-wider text-sm font-bold cursor-pointer"
@@ -369,10 +370,20 @@ export function ProductInfo({ product }: ProductInfoProps) {
 
                 {/* Wishlist & Share */}
                 <div className="flex items-center gap-6 pt-4">
-                    <button className="flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900 transition-colors group">
+                    {/* <button className="flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900 transition-colors group">
                         <Heart className="h-4 w-4 group-hover:fill-current" />
                         Add to Wishlist
-                    </button>
+                    </button> */}
+                    <WishlistButton
+                        product={{
+                            productId: product.id,
+                            name: product.name,
+                            sku: product.sku,
+                            price: product.salePrice,
+                            image: product.images[0]?.url || "",
+                            stock: stock,
+                        }}
+                    />
                     <button className="flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900 transition-colors">
                         <Share2 className="h-4 w-4" />
                         Share

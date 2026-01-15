@@ -4,11 +4,12 @@ import { createContext, useContext, useEffect, useState } from "react";
 import Swal from "sweetalert2";
 
 export type WishlistItem = {
-  productId: string;
-  name: string;
-  price: number;
-  image: string;
-  stockStatus: "IN_STOCK" | "OUT_OF_STOCK";
+   productId: string;
+    name: string;
+    sku: string;
+    price: number;
+    image: string;
+    stock: number;
 };
 
 type WishlistContextType = {
@@ -43,14 +44,37 @@ export function WishlistProvider({ children }: { children: React.ReactNode }) {
         Swal.fire("Already in wishlist");
         return prev;
       }
-      Swal.fire("Added to wishlist ❤️");
       return [...prev, item];
     });
   };
 
-  const removeFromWishlist = (productId: string) => {
-    setWishlist((prev) => prev.filter((item) => item.productId !== productId));
-  };
+  // const removeFromWishlist = (productId: string) => {
+  //   setWishlist((prev) => prev.filter((item) => item.productId !== productId));
+  // };
+
+  // inside your WishlistContext
+ const removeFromWishlist = (productId: string) => {
+  const item = wishlist.find((i) => i.productId === productId);
+
+  if (!item) return; 
+
+  // Show confirmation modal
+  Swal.fire({
+    title: "Are you sure?",
+    text: `Do you want to remove "${item.name}" from your wishlist?`,
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonText: "Yes, remove it",
+    cancelButtonText: "Cancel",
+    reverseButtons: true,
+  }).then((result) => {
+    if (result.isConfirmed) {
+      setWishlist((prev) =>
+        prev.filter((i) => i.productId !== productId)
+      );
+    }
+  });
+};
 
   const isInWishlist = (productId: string) =>
     wishlist.some((item) => item.productId === productId);

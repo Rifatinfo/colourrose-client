@@ -30,7 +30,7 @@ export default function WishlistButton({ isMobileMenuOpen}: Props) {
       <Heart strokeWidth={2} className="w-6 h-6" />
 
       {/* Count Badge */}
-      {isHydrated && count > 0 && (
+      {isHydrated  && (
         <span
           className={`absolute -top-1 -right-1 min-w-[20px] h-5 px-1 flex items-center justify-center rounded-full text-xs font-semibold shadow-md
             ${isMobileMenuOpen ? "bg-white text-black" : "bg-black text-white"}`}

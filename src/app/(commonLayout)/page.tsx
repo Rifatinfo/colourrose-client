@@ -4,6 +4,7 @@ import { CollectionSection } from "@/components/modules/Home/CollectionSection";
 import { Hero } from "@/components/modules/Home/Hero";
 
 const HomePage = () => {
+    
     return (
         <div>
            <Hero />

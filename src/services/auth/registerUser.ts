@@ -33,7 +33,7 @@ export const registerClient = async (_currentState: any, formData: FormData): Pr
             newFormData.append("file", formData.get("file") as Blob);
         }
 
-        const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/user/create`, {
+        const res = await fetch(`http://localhost:5000/api/v1/user/create`, {
             method: "POST",
             body: newFormData, // FormData
         });

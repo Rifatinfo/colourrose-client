@@ -6,15 +6,50 @@ import Image from 'next/image';
 import { useCart } from '@/context/CartContext';
 import Swal from 'sweetalert2';
 import { useCartDrawer } from '@/context/CartDrawerContext';
+import { useRouter } from 'next/navigation';
+import { isLoggedIn, setPostLoginRedirect } from '@/utils/postLoginRedirect';
+import { useLogin } from '@/context/UIContext';
 
 
 export function CartDrawer() {
     const { isOpen, closeDrawer, mode } = useCartDrawer();
     const { cart, updateQty, removeItem } = useCart();
+    const { openLoginModal } = useLogin();
+
+    const router = useRouter();
     const subtotal = cart.reduce(
         (sum, item) => sum + item.price * item.quantity,
         0
     );
+    const handleCheckout = () => {
+        // 1 Cart empty check
+        if (cart.length === 0) {
+            Swal.fire({
+                icon: "error",
+                title: "Your cart is empty"
+            });
+            closeDrawer();
+            return;
+        }
+
+        // ============ 2 Login check ================ //
+        if (!isLoggedIn()) {
+            // 1 Close the drawer
+            closeDrawer();
+
+            // 2 Set redirect path
+            setPostLoginRedirect("/checkout");
+
+            // 3 Open login modal
+            openLoginModal();
+            return;
+        }
+
+
+        closeDrawer();
+        router.push("/checkout");
+    }
+
 
     return (
         <AnimatePresence>
@@ -197,7 +232,7 @@ export function CartDrawer() {
                                     <p className="text-xs text-gray-500 text-center">Taxes calculated at checkout</p>
 
                                     <div className="space-y-2">
-                                        <button className="w-full flex items-center justify-center px-3 py-2 md:px-6 md:py-4 border border-transparent text-sm md:text-base font-bold rounded-none text-white bg-black transition-all shadow-md hover:shadow-lg uppercase tracking-wide md:tracking-wider cursor-pointer">
+                                        <button onClick={handleCheckout} className="w-full flex items-center justify-center px-3 py-2 md:px-6 md:py-4 border border-transparent text-sm md:text-base font-bold rounded-none text-white bg-black transition-all shadow-md hover:shadow-lg uppercase tracking-wide md:tracking-wider cursor-pointer">
                                             Proceed to Checkout
                                             <ArrowRight className="ml-2 h-4 w-4 md:h-5 md:w-5" />
                                         </button>

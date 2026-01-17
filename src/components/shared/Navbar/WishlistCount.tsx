@@ -3,14 +3,15 @@
 import { Heart } from "lucide-react";
 import { useWishlist } from "@/context/WishlistContext";
 import { useSyncExternalStore } from "react";
+import Link from "next/link";
 
 type Props = {
   isMobileMenuOpen: boolean;        // optional, like CartButton
 };
 
-const emptySubscribe = () => () => {};
+const emptySubscribe = () => () => { };
 
-export default function WishlistButton({ isMobileMenuOpen}: Props) {
+export default function WishlistButton({ isMobileMenuOpen }: Props) {
   const { wishlist } = useWishlist();
   const count = wishlist.length;
 
@@ -22,22 +23,26 @@ export default function WishlistButton({ isMobileMenuOpen}: Props) {
   );
 
   return (
-    <button
-      aria-label="Wishlist"
-      className="relative p-2 hover:text-gold transition-colors duration-200"
+    <Link href="/wishlist"
     >
-      {/* Heart Icon */}
-      <Heart strokeWidth={2} className="w-6 h-6" />
+      <button
+        aria-label="Wishlist"
+        className="relative cursor-pointer p-2 hover:text-gold transition-colors duration-200"
+      >
+        {/* Heart Icon */}
+        <Heart strokeWidth={2} className="w-6 h-6" />
 
-      {/* Count Badge */}
-      {isHydrated  && (
-        <span
-          className={`absolute -top-1 -right-1 min-w-[20px] h-5 px-1 flex items-center justify-center rounded-full text-xs font-semibold shadow-md
+        {/* Count Badge */}
+        {isHydrated && (
+          <span
+            className={`absolute -top-1 -right-1 min-w-[20px] h-5 px-1 flex items-center justify-center rounded-full text-xs font-semibold shadow-md
             ${isMobileMenuOpen ? "bg-white text-black" : "bg-black text-white"}`}
-        >
-          {count}
-        </span>
-      )}
-    </button>
+          >
+            {count}
+          </span>
+        )}
+      </button>
+    </Link>
+
   );
 }

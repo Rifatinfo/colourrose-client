@@ -140,7 +140,7 @@ export function Navbar() {
               <button className="hover:text-gold transition-colors">
                 <Search strokeWidth={2} className="w-6 h-6" />
               </button>
-              <button  onClick={() => setIsLoginModalOpen(true)} className="cursor-pointer">
+              <button onClick={() => setIsLoginModalOpen(true)} className="cursor-pointer">
                 <User strokeWidth={2} className="w-6 h-6" />
               </button>
               <CartButton
@@ -169,7 +169,7 @@ export function Navbar() {
             </div>
           </div>
         </div>
-     
+
 
         {/*========================= Mega Menu Dropdown========================= */}
         <MegaMenu
@@ -179,7 +179,7 @@ export function Navbar() {
           isHome={isHome}
         />
       </motion.header>
-        {/*================ Login Modal =====================*/}
+      {/*================ Login Modal =====================*/}
       {
         isLoginModalOpen && <LoginModal isOpen={isLoginModalOpen} onClose={() => setIsLoginModalOpen(false)} />
       }
@@ -211,8 +211,8 @@ export function Navbar() {
                   <User strokeWidth={2} className="w-6 h-6" />
                 </button>
                 <CartButton openDrawer={openDrawer} cartCount={cartCount} isMobileMenuOpen={isMobileMenuOpen} />
-                <WishlistCount isMobileMenuOpen={isMobileMenuOpen} />
 
+                <WishlistCount isMobileMenuOpen={isMobileMenuOpen} />
               </div>
 
               {/* Mobile Mega Menu Accordion */}

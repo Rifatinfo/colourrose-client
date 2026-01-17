@@ -120,14 +120,7 @@
   font-family: "Funnel Display", sans-serif;
 }
 
-select option {
-  background-color: white; /* change blue to white */
-  color: black;
-}
-#color-selector option {
-  background-color: white;
-  color: black;
-}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;

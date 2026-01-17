@@ -160,3 +160,10 @@ select option {
   scrollbar-width: none;
 }
 
+.swal-toast {
+  background: #ffffff !important;
+  color: black !important;
+  font-weight: 600;
+  border-radius: 8px;
+}
+

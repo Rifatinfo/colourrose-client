@@ -11,10 +11,11 @@ import { signUpSchema } from "../../zod/user.validation";
 import Image from "next/image";
 import { useState } from "react";
 import { registerClient } from "@/services/auth/registerUser";
+import { Toast } from "../shared/Toast/Toast";
 
 type SignUpFormValues = z.infer<typeof signUpSchema>;
 
-const SignUpForm = ({onClose}: {onClose: () => void}) => {
+const SignUpForm = ({ onClose }: { onClose: () => void }) => {
     const [previewImage, setPreviewImage] = useState<string | null>(null);
     const [state, setState] = useState<any>(null); // store API response
     const [isPending, setIsPending] = useState(false);
@@ -69,13 +70,14 @@ const SignUpForm = ({onClose}: {onClose: () => void}) => {
             setState(result); // store API response
 
             if (result?.success) {
-                alert("User registered successfully!");
+                Toast.fire({
+                    icon: "success",
+                    title: "registered successfully!",
+                });
                 form.reset(); // reset form
                 setPreviewImage(null);
                 onClose();
-            } else {
-                alert(result?.message || "Registration failed");
-            }
+            } 
         } catch (err) {
             console.error(err);
             alert("Something went wrong. Please try again.");

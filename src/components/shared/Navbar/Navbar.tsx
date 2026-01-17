@@ -7,7 +7,6 @@ import {
   Menu,
   X,
   ChevronDown,
-  Heart,
 } from "lucide-react";
 import {
   motion,
@@ -28,6 +27,7 @@ import { useCart } from "@/context/CartContext";
 import CartButton from "./CartButton";
 import { useCartDrawer } from "@/context/CartDrawerContext";
 import WishlistCount from "./WishlistCount";
+import LoginModal from "@/components/auth-form/LoginModal";
 
 export function Navbar() {
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
@@ -35,6 +35,7 @@ export function Navbar() {
   const [expandedMobileCategory, setExpandedMobileCategory] = useState<
     string | null
   >(null);
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false)
   const { openDrawer } = useCartDrawer();
 
   const { cartCount } = useCart();
@@ -139,10 +140,9 @@ export function Navbar() {
               <button className="hover:text-gold transition-colors">
                 <Search strokeWidth={2} className="w-6 h-6" />
               </button>
-              <button className="hover:text-gold transition-colors">
+              <button  onClick={() => setIsLoginModalOpen(true)} className="cursor-pointer">
                 <User strokeWidth={2} className="w-6 h-6" />
               </button>
-
               <CartButton
                 openDrawer={openDrawer}
                 cartCount={cartCount}
@@ -169,6 +169,7 @@ export function Navbar() {
             </div>
           </div>
         </div>
+     
 
         {/*========================= Mega Menu Dropdown========================= */}
         <MegaMenu
@@ -178,7 +179,10 @@ export function Navbar() {
           isHome={isHome}
         />
       </motion.header>
-
+        {/*================ Login Modal =====================*/}
+      {
+        isLoginModalOpen && <LoginModal isOpen={isLoginModalOpen} onClose={() => setIsLoginModalOpen(false)} />
+      }
       {/*========================= Mobile Menu Overlay =========================*/}
       <AnimatePresence>
         {isMobileMenuOpen && (
@@ -203,7 +207,7 @@ export function Navbar() {
                 <button className="hover:text-gold transition-colors">
                   <Search strokeWidth={2} className="w-6 h-6" />
                 </button>
-                <button className="hover:text-gold transition-colors">
+                <button className="cursor-pointer" onClick={() => setIsLoginModalOpen(true)}>
                   <User strokeWidth={2} className="w-6 h-6" />
                 </button>
                 <CartButton openDrawer={openDrawer} cartCount={cartCount} isMobileMenuOpen={isMobileMenuOpen} />

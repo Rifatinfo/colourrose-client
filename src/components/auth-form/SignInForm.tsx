@@ -144,7 +144,7 @@ const LoginForm = ({ onClose }: { onClose: () => void }) => {
                     onClick={() => {
                         // send current page path to backend
                         window.location.href =
-                            `${process.env.NEXT_PUBLIC_API_URL}/api/auth/google?redirect=${encodeURIComponent(
+                            `http://localhost:5000/api/v1/auth/google/callback?redirect=${encodeURIComponent(
                                 pathname
                             )}`;
                     }}

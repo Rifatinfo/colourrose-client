@@ -3,7 +3,6 @@
 
 import { useState } from 'react'
 import {
-    Heart,
     Share2,
     Minus,
     Plus,
@@ -16,7 +15,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import Swal from 'sweetalert2';
 import { useCart } from '@/context/CartContext';
 import { useCartDrawer } from '@/context/CartDrawerContext';
-import { useFettie } from '@/hooks/use-confetti';
 import WishlistButton from '@/components/shared/WishlistButton/WishlistButton';
 
 interface Product {
@@ -42,7 +40,8 @@ export function ProductInfo({ product }: ProductInfoProps) {
     const [selectedColor, setSelectedColor] = useState<string | undefined>(undefined);
     const { addToCart } = useCart();
     const { openDrawer } = useCartDrawer();
-    // const { run } = useFettie();
+
+
     const sizes = Array.from(
         new Set(product.variants.map(v => v.size))
     );
@@ -375,13 +374,14 @@ export function ProductInfo({ product }: ProductInfoProps) {
                         Add to Wishlist
                     </button> */}
                     <WishlistButton
+                        
                         product={{
                             productId: product.id,
                             name: product.name,
                             sku: product.sku,
-                            price: product.salePrice,
-                            image: product.images[0]?.url || "",
-                            stock: stock,
+                            salePrice: product.salePrice.toString(),
+                            images: product.images || [],
+                            stockStatus: stock.toString(),
                         }}
                     />
                     <button className="flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900 transition-colors">

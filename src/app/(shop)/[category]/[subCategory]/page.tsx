@@ -47,8 +47,8 @@ const SubCategoryPage = async ({ params, searchParams }: PageProps) => {
         <p>No products found in this sub-category.</p>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-3">
-          {products.map((product: any) => (
-            <ProductCard key={product.id} 
+          {products.map((product: any, idx : number) => (
+            <ProductCard key={product.id}
             product={product}  
             category={category}
             subCategory={subCategory} />

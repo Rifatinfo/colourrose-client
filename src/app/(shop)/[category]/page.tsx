@@ -31,7 +31,7 @@ const CategoryPage = async ({ params, searchParams }: PageProps) => {
     const limit = Number(response?.meta?.limit) || 10;
     const currentPage = Number(response?.meta?.page) || 1;
     const totalPages = Math.max(1, Math.ceil(total / limit));
-    console.log("currentPage : ", currentPage, " totalPages : ", totalPages);
+    console.log("products in category:", products[0]);
 
     return (
         <div>

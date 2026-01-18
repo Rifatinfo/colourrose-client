@@ -7,9 +7,9 @@ export type WishlistItem = {
    productId: string;
     name: string;
     sku: string;
-    price: number;
-    image: string;
-    stock: number;
+    salePrice: number;
+    images: { url: string }[];
+    stockStatus: string;
 };
 
 type WishlistContextType = {
@@ -39,6 +39,8 @@ export function WishlistProvider({ children }: { children: React.ReactNode }) {
   }, [wishlist]);
 
   const addToWishlist = (item: WishlistItem) => {
+    console.log();
+    
     setWishlist((prev) => {
       if (prev.some((p) => p.productId === item.productId)) {
         Swal.fire("Already in wishlist");
@@ -48,9 +50,6 @@ export function WishlistProvider({ children }: { children: React.ReactNode }) {
     });
   };
 
-  // const removeFromWishlist = (productId: string) => {
-  //   setWishlist((prev) => prev.filter((item) => item.productId !== productId));
-  // };
 
   // inside your WishlistContext
  const removeFromWishlist = (productId: string) => {

@@ -4,11 +4,11 @@ import Image from "next/image";
 import { X } from "lucide-react";
 import { useWishlist } from "@/context/WishlistContext";
 import { useSyncExternalStore } from "react";
+import { getImageUrl } from "@/lib/getImageUrl";
 // import SelectOptionsButton from "./SelectOptionsButton";
 
 const WishlistTable = () => {
   const { wishlist, removeFromWishlist } = useWishlist();
-  console.log("Wishlist items:", wishlist);
   //  Ensure same HTML on server & client
   const mounted = useSyncExternalStore(
     () => () => { },
@@ -38,9 +38,9 @@ const WishlistTable = () => {
         </div>
 
         {/* Rows */}
-        {wishlist.map((item) => (
+        {wishlist.map((item, idx) => (
           <div
-            key={item.productId}
+            key={idx}
             className="grid grid-cols-[80px_1fr_200px_200px_200px] items-center border-b py-6"
           >
             <button
@@ -51,24 +51,26 @@ const WishlistTable = () => {
             </button>
 
             <div className="flex items-center gap-6">
-              <div className="relative h-28 w-20 overflow-hidden">
-                <Image
-                  src="https://colourrose.shop/wp-content/uploads/2024/11/2-19-300x300.jpg"
-                  alt={item.name}
-                  fill
-                  className="object-cover"
-                />
-              </div>
+            <div className="relative h-28 w-20 overflow-hidden">
+                    <Image
+                    key={idx}
+                    src={getImageUrl(item.images[0].url)}
+                    alt={item.name}
+                    width={80}
+                    height={112}
+                    unoptimized
+                  />
+            </div>
               <h3 className="tracking-wide uppercase">
                 {item.name}
               </h3>
             </div>
 
-            <div className="">{item.price} TK</div>
+            <div className="">{item.salePrice} TK</div>
 
             <div className="uppercase tracking-wide text-gray-500">
               {/* {item.stockStatus > 0 ? "In stock" : "Out of stock"} */}
-              {item.stock > 0 ? "In stock" : "Out of stock"}
+              {Number(item.stockStatus) > 0 ? "In stock" : "Out of stock"}
             </div>
 
             <button className="group relative bg-black px-8 py-3 text-xs tracking-widest text-white overflow-hidden">
@@ -84,9 +86,9 @@ const WishlistTable = () => {
 
       {/* ================= MOBILE / TABLET ================= */}
       <div className="space-y-6 lg:hidden">
-        {wishlist.map((item) => (
+        {wishlist.map((item, index) => (
           <div
-            key={item.productId}
+            key={index}
             className="relative border p-4 rounded-md space-y-4"
           >
             <button
@@ -110,9 +112,9 @@ const WishlistTable = () => {
                 <h3 className="text-sm font-medium uppercase">
                   {item.name}
                 </h3>
-                <p className="text-sm">{item.price} TK</p>
+                <p className="text-sm">{item.salePrice} TK</p>
                 <p className="text-xs uppercase">
-                  {item.stock > 0 ? "In stock" : "Out of stock"}
+                  {Number(item.stockStatus) > 0 ? "In stock" : "Out of stock"}
                 </p>
               </div>
             </div>

@@ -6,12 +6,12 @@ import { useFettie } from "@/hooks/use-confetti";
 
 type Props = {
     product: {
-        productId: string;
-        name: string;
-        sku: string;
-        price: number;
-        image: string;
-        stock: number;
+    productId: string;
+    name: string;
+    sku: string;
+    salePrice: string;
+    images: { url: string }[];
+    stockStatus: string;
     };
 };
 
@@ -28,9 +28,9 @@ export default function WishlistButton({ product }: Props) {
                 productId: product.productId,
                 name: product.name,
                 sku: product.sku,
-                price: product.price,
-                image: product.image[0] || "",
-                stock: product.stock,
+                salePrice: parseFloat(product.salePrice),
+                images: product.images || "",
+                stockStatus: product.stockStatus,
             });
             run();
         }

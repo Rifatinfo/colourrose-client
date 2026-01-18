@@ -2,10 +2,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ShoppingBag, Heart } from 'lucide-react'
+import { ShoppingBag } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link';
 import WishlistIconButton from '../WishlistButton/WishlistIconButton';
+import { getImageUrl } from '@/lib/getImageUrl';
 
 
 
@@ -83,7 +84,8 @@ export function ProductCard({
                     /> */}
                         <Image
                             fill
-                            src="https://colourrose.shop/wp-content/uploads/2024/03/P-1131-01.jpg"
+                            src={getImageUrl(product.images?.[0]?.url)}
+                            unoptimized
                             alt={product.name}
                             className="h-full w-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105"
                         />
@@ -108,8 +110,8 @@ export function ProductCard({
 
                         
                         {/*====================== Wishlist Button ====================*/}
-                         <WishlistIconButton product={product} />
-
+                         <WishlistIconButton product={product}  />
+ 
                         {/* Quick Add Overlay */}
                         <AnimatePresence>
                             {isHovered && (

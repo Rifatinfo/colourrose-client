@@ -29,12 +29,6 @@ const LoginForm = ({ onClose }: { onClose: () => void }) => {
     const { closeLoginModal } = useLogin();
     const router = useRouter();
 
-    //================ after successful login ===================// 
-    // closeLoginModal();
-    // const redirect = getPostLoginRedirect();
-    // clearPostLoginRedirect();
-    // router.replace(redirect);
-
 
     const form = useForm<SignInFormValues>({
         resolver: zodResolver(signInSchema),
@@ -78,7 +72,7 @@ const LoginForm = ({ onClose }: { onClose: () => void }) => {
                 closeLoginModal();
 
                 // Redirect after login
-                const redirect = getPostLoginRedirect() || "/";
+                const redirect = getPostLoginRedirect() || "/checkout";
                 clearPostLoginRedirect();
                 router.replace(redirect);
 
@@ -257,8 +251,31 @@ const LoginForm = ({ onClose }: { onClose: () => void }) => {
                 {/* Submit */}
                 <button
                     type="submit"
-                    className="w-full bg-black text-white font-bold uppercase text-sm py-2.5 cursor-pointer transition-colors"
+                    disabled={isPending}
+                    className="relative w-full py-2.5 cursor-pointer text-sm font-bold uppercase text-white bg-black rounded-none flex items-center justify-center gap-2 overflow-hidden "
                 >
+                    {/* Spinner */}
+                    {isPending && (
+                        <svg
+                            className="h-4 w-4 animate-spin mr-2"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                        >
+                            <circle
+                                className="opacity-25"
+                                cx="12"
+                                cy="12"
+                                r="10"
+                                stroke="currentColor"
+                                strokeWidth="4"
+                            />
+                            <path
+                                className="opacity-75"
+                                fill="currentColor"
+                                d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                            />
+                        </svg>
+                    )}
                     {isPending ? "Logging in..." : "Sign In"}
                 </button>
             </form>

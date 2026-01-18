@@ -10,6 +10,8 @@ import { getImageUrl } from "@/lib/getImageUrl";
 const WishlistTable = () => {
   const { wishlist, removeFromWishlist } = useWishlist();
   //  Ensure same HTML on server & client
+  console.log("Wishlidtttttttttttttttttt", wishlist[0]?.images[0]?.url);
+
   const mounted = useSyncExternalStore(
     () => () => { },
     () => true,
@@ -39,6 +41,14 @@ const WishlistTable = () => {
 
         {/* Rows */}
         {wishlist.map((item, idx) => (
+          console.log(
+            "FINAL IMAGE URL:",
+            getImageUrl(item?.images?.[0]?.url)
+          ),
+          console.log(
+            "ENV:",
+            process.env.NEXT_PUBLIC_API_URL
+          ),
           <div
             key={idx}
             className="grid grid-cols-[80px_1fr_200px_200px_200px] items-center border-b py-6"
@@ -51,16 +61,17 @@ const WishlistTable = () => {
             </button>
 
             <div className="flex items-center gap-6">
-            <div className="relative h-28 w-20 overflow-hidden">
-                    <Image
-                    key={idx}
-                    src={getImageUrl(item.images[0].url)}
-                    alt={item.name}
-                    width={80}
-                    height={112}
-                    unoptimized
-                  />
-            </div>
+              <div className="relative h-28 w-20 overflow-hidden">
+                <Image
+                  key={idx}
+                  // src={getImageUrl(item.images[0].url)}
+                  src={getImageUrl(item?.images?.[0]?.url)}
+                  alt={item.name}
+                  width={80}
+                  height={112}
+                  unoptimized
+                />
+              </div>
               <h3 className="tracking-wide uppercase">
                 {item.name}
               </h3>
@@ -101,10 +112,13 @@ const WishlistTable = () => {
             <div className="flex gap-4">
               <div className="relative h-32 w-24 overflow-hidden">
                 <Image
-                  src="https://colourrose.shop/wp-content/uploads/2024/11/2-19-300x300.jpg"
+                  key={index}
+                  // src={getImageUrl(item.images[0].url)}
+                  src={getImageUrl(item?.images?.[0]?.url)}
                   alt={item.name}
-                  fill
-                  className="object-cover"
+                  width={80}
+                  height={112}
+                  unoptimized
                 />
               </div>
 

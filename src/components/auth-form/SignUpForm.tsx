@@ -77,7 +77,7 @@ const SignUpForm = ({ onClose }: { onClose: () => void }) => {
                 form.reset(); // reset form
                 setPreviewImage(null);
                 onClose();
-            } 
+            }
         } catch (err) {
             console.error(err);
             alert("Something went wrong. Please try again.");
@@ -226,10 +226,9 @@ const SignUpForm = ({ onClose }: { onClose: () => void }) => {
                     {/* Spinner */}
                     {isPending && (
                         <svg
-                            className="w-4 h-4 text-white animate-spin"
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
+                            className="h-4 w-4 animate-spin mr-2"
                             viewBox="0 0 24 24"
+                            fill="none"
                         >
                             <circle
                                 className="opacity-25"
@@ -237,12 +236,12 @@ const SignUpForm = ({ onClose }: { onClose: () => void }) => {
                                 cy="12"
                                 r="10"
                                 stroke="currentColor"
-                                strokeWidth="3"
+                                strokeWidth="4"
                             />
                             <path
                                 className="opacity-75"
                                 fill="currentColor"
-                                d="M4 12a8 8 0 018-8v4l3-3-3-3v4a8 8 0 11-8 8z"
+                                d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
                             />
                         </svg>
                     )}

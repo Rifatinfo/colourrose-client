@@ -1,14 +1,34 @@
+"use client";
+
 import Image from "next/image";
+import { Plus, Minus, Trash2 } from "lucide-react";
+import Swal from "sweetalert2";
+import { useCart } from "@/context/CartContext";
+import CartItemCount from "./CartItemCount";
 
 export function ShoppingCart() {
+  const { cart, updateQty, removeItem } = useCart();
+  if (!cart || cart.length === 0) {
+    return (
+      <div className="mb-8">
+        <div className="flex items-center justify-between mb-5">
+          <h2 className="text-xs font-semibold uppercase tracking-[0.2em] text-gray-600">
+            Shopping Cart
+          </h2>
+        </div>
+        <p className="text-center text-gray-500">Your cart is empty</p>
+      </div>
+    );
+  }
   return (
     <div className="mb-8">
-      {/* Section Header */}
+      {/*=============== Section Header ===================*/}
       <div className="flex items-center justify-between mb-5">
         <h2 className="text-xs font-semibold uppercase tracking-[0.2em] text-gray-600">
           Shopping Cart
         </h2>
-        <span className="font-semibold text-gray-400">2 Items</span>
+        {/* <span className="font-semibold text-gray-400">{cart.length} Items</span> */}
+        <CartItemCount />
       </div>
 
       {/* Cart List */}

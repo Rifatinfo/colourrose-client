@@ -24,7 +24,7 @@ export function ShoppingCart() {
                 <Image
                   width={96}
                   height={112}
-                  src="https://images.unsplash.com/photo-1556905055-8f358a7a47b2?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80"
+                  src="https://colourrose.shop/wp-content/uploads/2024/03/P-1131-01-768x998.jpg"
                   alt="Oversized Sweatshirt"
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                 />

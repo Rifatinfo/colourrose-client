@@ -1,10 +1,9 @@
 import CheckoutContent from "./_components/CheckoutContent";
 
-
 const CheckoutPage = () => {
   return (
     <div>
-      <CheckoutContent/>
+      <CheckoutContent />
     </div>
   )
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import { deliveryOptions } from "@/config/deliveryOptions";
+import { useSyncExternalStore } from "react";
 
 type Props = {
   selected: string;
@@ -8,6 +9,14 @@ type Props = {
 };
 
 export function DeliveryOptions({ selected, onChange }: Props) {
+  //================Prevent SSR hydration mismatch for client-only state (cart/localStorage) ================//
+  const mounted = useSyncExternalStore(
+    () => () => { },
+    () => true,
+    () => false
+  );
+
+  if (!mounted) return null;
   return (
     <div className="mb-8">
       <h2 className="text-xs sm:text-sm font-semibold uppercase tracking-[0.2em] text-gray-600 mb-4">
@@ -20,11 +29,10 @@ export function DeliveryOptions({ selected, onChange }: Props) {
             key={option.id}
             htmlFor={option.id}
             className={`flex flex-col sm:flex-row cursor-pointer gap-4 rounded-2xl border p-4 transition-all
-            ${
-              selected === option.id
+            ${selected === option.id
                 ? "shadow-lg"
                 : "border-gray-200 hover:border-gray-300"
-            }`}
+              }`}
           >
             <input
               id={option.id}

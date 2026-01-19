@@ -12,7 +12,7 @@ const res = await fetch(
 
 const json = await res.json();
 const products = json.data;
-console.log(products);
+
 
 const container = {
     hidden: {

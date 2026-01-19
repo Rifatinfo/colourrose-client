@@ -1,6 +1,18 @@
-import React from "react";
+import { deliveryOptions } from "@/config/deliveryOptions";
+import { useCart } from "@/context/CartContext";
 
-export function OrderSummary() {
+type Props = {
+  selectedDelivery: string;
+};
+
+export function OrderSummary({ selectedDelivery }: Props) {
+    const { cart } = useCart();
+
+    const productCount = cart.reduce((total, item) => total + item.quantity, 0);
+    const subTotal = cart.reduce((total, item) => total + item.price * item.quantity, 0);
+    const deliveryCharge = deliveryOptions.find((d) => d.id  === selectedDelivery)?.price || 0;
+
+    const gradTotal = subTotal + deliveryCharge;
   return (
     <div className="mb-6">
       <div className="rounded-2xl border border-gray-200 bg-white p-5 shadow-lg">
@@ -14,7 +26,7 @@ export function OrderSummary() {
           {/* Products */}
           <div className="flex justify-between items-center">
             <span className="text-gray-600">No of Products</span>
-            <span className="font-semibold text-gray-900">1</span>
+            <span className="font-semibold text-gray-900">{productCount}</span>
           </div>
 
           {/* Divider */}
@@ -23,13 +35,13 @@ export function OrderSummary() {
           {/* Payable */}
           <div className="flex justify-between items-center">
             <span className="text-gray-600">Payable Amount</span>
-            <span className="font-semibold text-gray-900">Tk. 840</span>
+            <span className="font-semibold text-gray-900">Tk. {subTotal}</span>
           </div>
 
           {/* Delivery */}
           <div className="flex justify-between items-center">
             <span className="text-gray-600">Delivery Charge</span>
-            <span className="font-semibold text-gray-900">Tk. 60</span>
+            <span className="font-semibold text-gray-900">Tk. {deliveryCharge}</span>
           </div>
 
           {/* Divider */}
@@ -41,7 +53,7 @@ export function OrderSummary() {
               Grand Total
             </span>
             <span className="text-lg font-bold text-[#E31E24]">
-              Tk. 900
+              Tk. {gradTotal}
             </span>
           </div>
         </div>

@@ -10,7 +10,7 @@ import { getImageUrl } from "@/lib/getImageUrl";
 const WishlistTable = () => {
   const { wishlist, removeFromWishlist } = useWishlist();
   //  Ensure same HTML on server & client
-  console.log("Wishlidtttttttttttttttttt", wishlist[0]?.images[0]?.url);
+  
 
   const mounted = useSyncExternalStore(
     () => () => { },
@@ -41,14 +41,6 @@ const WishlistTable = () => {
 
         {/* Rows */}
         {wishlist.map((item, idx) => (
-          console.log(
-            "FINAL IMAGE URL:",
-            getImageUrl(item?.images?.[0]?.url)
-          ),
-          console.log(
-            "ENV:",
-            process.env.NEXT_PUBLIC_API_URL
-          ),
           <div
             key={idx}
             className="grid grid-cols-[80px_1fr_200px_200px_200px] items-center border-b py-6"

@@ -23,7 +23,6 @@ const SignUpForm = ({ onClose }: { onClose: () => void }) => {
         password: false,
         confirmPassword: false,
     });
-    console.log(state);
 
     const form = useForm<SignUpFormValues>({
         resolver: zodResolver(signUpSchema),

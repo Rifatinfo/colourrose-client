@@ -24,7 +24,6 @@ const ProductDetailsPage = async ({ params }: PageProps) => {
 
   const json = await res.json();
   const product = json.data;
-  console.log(json);
   
   return <ProductPage product={product} />;
 };

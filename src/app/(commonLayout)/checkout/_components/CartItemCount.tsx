@@ -5,6 +5,7 @@ import { useSyncExternalStore } from "react";
 
  const CartItemCount = ()  => {
   const { cart } = useCart();
+  //================Prevent SSR hydration mismatch for client-only state (cart/localStorage) ================//
   const mounted = useSyncExternalStore(
     () => () => {},
     () => true,

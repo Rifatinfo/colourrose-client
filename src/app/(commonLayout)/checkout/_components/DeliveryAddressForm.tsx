@@ -33,10 +33,10 @@ export function DeliveryAddressForm() {
           </div>
         </div>
 
-        {/* Email */}
+        {/* State */}
         <div className="space-y-1.5">
-          <Label className=" text-gray-600">Email</Label>
-          <Input type="email" placeholder="you@email.com" />
+          <Label className=" text-gray-600">State</Label>
+          <Input type="text" placeholder="you state" />
         </div>
 
         {/* Address */}

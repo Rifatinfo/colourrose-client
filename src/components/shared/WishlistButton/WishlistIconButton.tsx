@@ -17,7 +17,6 @@ type Props = {
 };
 
 export default function WishlistIconButton({ product }: Props) {
-  console.log("BBBBBBBBBBBBBBBBB",product);
   
   const { isInWishlist, addToWishlist, removeFromWishlist } = useWishlist();
   const { run } = useFettie();
@@ -43,7 +42,6 @@ export default function WishlistIconButton({ product }: Props) {
         if (wishlisted) {
           removeFromWishlist(product.id);
         } else {
-          console.log(product);
 
           addToWishlist({
             productId: product.id,

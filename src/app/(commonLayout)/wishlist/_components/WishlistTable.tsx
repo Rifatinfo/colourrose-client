@@ -5,11 +5,9 @@ import { X } from "lucide-react";
 import { useWishlist } from "@/context/WishlistContext";
 import { useSyncExternalStore } from "react";
 import { getImageUrl } from "@/lib/getImageUrl";
-// import SelectOptionsButton from "./SelectOptionsButton";
 
 const WishlistTable = () => {
   const { wishlist, removeFromWishlist } = useWishlist();
-  //  Ensure same HTML on server & client
   
 
   const mounted = useSyncExternalStore(
@@ -56,8 +54,7 @@ const WishlistTable = () => {
               <div className="relative h-28 w-20 overflow-hidden">
                 <Image
                   key={idx}
-                  // src={getImageUrl(item.images[0].url)}
-                  src={getImageUrl(item?.images?.[0]?.url)}
+                  src={`${process.env.NEXT_PUBLIC_API_URL}${item.images[0].url}`}
                   alt={item.name}
                   width={80}
                   height={112}

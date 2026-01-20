@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+
 import ProductListHeader from "@/components/modules/product/ProductListHeader";
 import Breadcrumb from "@/components/shared/Breadcrumb/Breadcrumb";
 import TablePagination from "@/components/shared/pagination/TablePagination";
@@ -7,9 +8,9 @@ import { fetchProductsByCategory } from "@/services/product/product";
 import { Suspense } from "react";
 
 export interface PageProps {
-    params: {
+    params: Promise<{
         category: string
-    }
+    }>;
     searchParams: Promise<{
         page?: string;
         limit?: string;
@@ -17,7 +18,6 @@ export interface PageProps {
         sortOrder?: string
     }>
 }
-
 
 
 const CategoryPage = async ({ params, searchParams }: PageProps) => {
@@ -31,7 +31,7 @@ const CategoryPage = async ({ params, searchParams }: PageProps) => {
     const limit = Number(response?.meta?.limit) || 10;
     const currentPage = Number(response?.meta?.page) || 1;
     const totalPages = Math.max(1, Math.ceil(total / limit));
-    console.log("products in category:", products[0]);
+    
 
     return (
         <div>

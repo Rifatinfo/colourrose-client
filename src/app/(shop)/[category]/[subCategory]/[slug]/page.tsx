@@ -17,7 +17,6 @@ const ProductDetailsPage = async ({ params }: PageProps) => {
       cache: "no-store",
     }
   );
-
   // if (!res.ok) {
   //   throw new Error("Product not found");
   // }

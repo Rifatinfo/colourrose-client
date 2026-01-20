@@ -10,15 +10,15 @@ import { useSyncExternalStore } from "react";
 
 export function ShoppingCart() {
   const { cart, updateQty } = useCart();
-  
+
   //================Prevent SSR hydration mismatch for client-only state (cart/localStorage) ================//
-    const mounted = useSyncExternalStore(
-      () => () => {},
-      () => true,
-      () => false
-    );
-  
-    if (!mounted) return null;
+  const mounted = useSyncExternalStore(
+    () => () => { },
+    () => true,
+    () => false
+  );
+
+  if (!mounted) return null;
   if (!cart || cart.length === 0) {
     return (
       <div className="mb-8">
@@ -33,7 +33,7 @@ export function ShoppingCart() {
   }
 
 
-return (
+  return (
     <div className="mb-8">
       {/* Section Header */}
       <div className="flex items-center justify-between mb-5">
@@ -45,7 +45,11 @@ return (
 
       {/* Cart List */}
       <div className="space-y-4">
+
         {cart.map((item) => (
+          console.log(`item image`, item.image),
+          console.log("CART ITEMS", `${process.env.NEXT_PUBLIC_API_URL}${item.image}`),
+          console.log("CART ITEM IMAGE URL", getImageUrl(item.image)),
           <div
             key={`${item.productId}-${item.color}-${item.size}`}
             className="group relative overflow-hidden shadow-2xl bg-white/80 backdrop-blur-xl p-5 transition-all duration-300  hover:shadow-xl"
@@ -57,6 +61,7 @@ return (
                   width={96}
                   height={112}
                   src={getImageUrl(item.image)}
+                  // src={`${process.env.NEXT_PUBLIC_API_URL}${item.image}`}
                   alt={item.name}
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                   unoptimized

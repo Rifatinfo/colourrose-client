@@ -6,7 +6,6 @@ import { ShoppingBag } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link';
 import WishlistIconButton from '../WishlistButton/WishlistIconButton';
-import { getImageUrl } from '@/lib/getImageUrl';
 
 
 
@@ -60,6 +59,8 @@ export function ProductCard({
     const href = subCategory
         ? `/${category}/product/${subCategory}/${product.slug}`
         : `/${category}/product/${product.slug}`;
+    console.log("Image", `${process.env.NEXT_PUBLIC_API_URL}${product.images[0].url}`);
+
     return (
         <div>
             <Link href={href}>
@@ -84,10 +85,11 @@ export function ProductCard({
                     /> */}
                         <Image
                             fill
-                            src={getImageUrl(product.images?.[0]?.url)}
-                            unoptimized
-                            alt={product.name}
-                            className="h-full w-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105"
+                            // src={getImageUrl(product.images?.[0]?.url)}
+                             src={`${process.env.NEXT_PUBLIC_API_URL}${product.images[0].url}`}
+                             alt={product.name}
+                             className="h-full w-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105"
+                             unoptimized
                         />
 
                         {/* Badges */}
@@ -108,10 +110,10 @@ export function ProductCard({
                             </div>
                         )}
 
-                        
+
                         {/*====================== Wishlist Button ====================*/}
-                         <WishlistIconButton product={product}  />
- 
+                        <WishlistIconButton product={product} />
+
                         {/* Quick Add Overlay */}
                         <AnimatePresence>
                             {isHovered && (

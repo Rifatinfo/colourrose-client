@@ -38,7 +38,7 @@ const nextConfig: NextConfig = {
         hostname: "localhost",
         port: "5000",
         pathname: "/uploads/**",
-      },
+      }
     ],
   },
 };

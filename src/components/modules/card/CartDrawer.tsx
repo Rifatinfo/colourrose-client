@@ -9,6 +9,7 @@ import { useCartDrawer } from '@/context/CartDrawerContext';
 import { useRouter } from 'next/navigation';
 import { isLoggedIn, setPostLoginRedirect } from '@/utils/postLoginRedirect';
 import { useLogin } from '@/context/UIContext';
+import { getImageUrl } from '@/lib/getImageUrl';
 
 
 export function CartDrawer() {
@@ -32,20 +33,7 @@ export function CartDrawer() {
             return;
         }
 
-        // ============ 2 Login check ================ //
-        if (!isLoggedIn()) {
-            // 1 Close the drawer
-            closeDrawer();
-
-            // 2 Set redirect path
-            setPostLoginRedirect("/checkout");
-
-            // 3 Open login modal
-            openLoginModal();
-            return;
-        }
-
-
+    
         closeDrawer();
         router.push("/checkout");
     }
@@ -115,11 +103,13 @@ export function CartDrawer() {
                                                 <div className="flex-shrink-0 w-24 h-32 bg-gray-100 overflow-hidden">
                                                     <Image
                                                         // src={item.image || 'https://colourrose.shop/wp-content/uploads/2025/06/P-1452-1.jpg'}
-                                                        src='https://colourrose.shop/wp-content/uploads/2025/06/P-1452-1.jpg'
+                                                        // src='https://colourrose.shop/wp-content/uploads/2025/06/P-1452-1.jpg'
+                                                        src={getImageUrl(item.image)}
                                                         alt={item.name}
                                                         width={96}
                                                         height={128}
                                                         className="object-cover w-full h-full"
+                                                        unoptimized
                                                     />
                                                 </div>
 

@@ -27,7 +27,7 @@ const ProductPage = ({ product }: ProductPageProps) => {
 
                 {/*=========== Product Layout ============== */}
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16">
-                    <ProductImageGallery />
+                    <ProductImageGallery  product={product} />
                     <ProductInfo product={product} />
                 </div>
 

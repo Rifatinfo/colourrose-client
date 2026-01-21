@@ -3,15 +3,16 @@
 import { Heart } from "lucide-react";
 import { useWishlist } from "@/context/WishlistContext";
 import { useFettie } from "@/hooks/use-confetti";
+import { useEffect, useState } from "react";
 
 type Props = {
     product: {
-    productId: string;
-    name: string;
-    sku: string;
-    salePrice: string;
-    images: { url: string }[];
-    stockStatus: string;
+        productId: string;
+        name: string;
+        sku: string;
+        salePrice: string;
+        images: { url: string }[];
+        stockStatus: string;
     };
 };
 
@@ -19,6 +20,15 @@ export default function WishlistButton({ product }: Props) {
     const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
     const { run } = useFettie();
     const inWishlist = isInWishlist(product.productId);
+
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        setMounted(true);
+    }, []);
+
+    if (!mounted) return null;    // return use Skeleton 
 
     const toggleWishlist = () => {
         if (inWishlist) {
@@ -51,3 +61,4 @@ export default function WishlistButton({ product }: Props) {
         </button>
     );
 }
+

@@ -14,7 +14,7 @@ const PRODUCT_IMAGES = [
     'https://colourrose.shop/wp-content/uploads/2025/03/POLO-2-3-650x650.jpg',
     // 'https://colourrose.shop/wp-content/uploads/2025/01/WhatsApp-Image-2025-01-09-at-17.30.45_9a45fa73-650x650.jpg',
     'https://colourrose.shop/wp-content/uploads/2024/12/2-9-650x650.jpg',
-    'https://colourrose.shop/wp-content/uploads/2024/03/P_1258-1-650x650.jpg'
+    // 'https://colourrose.shop/wp-content/uploads/2024/03/P_1258-1-650x650.jpg'
 ]
 
 // Generate more items for a denser, continuous flow

@@ -1,0 +1,72 @@
+export type UserRole = "ADMIN" | "CUSTOMER" | "SHOP_MANAGER";
+
+export type RouteConfig = {
+    exact: string[],
+    patterns: RegExp[]
+}
+
+export const authRoutes = ["/login"];
+
+export const commonProtectedRoutes: RouteConfig = {
+    exact: ["/my-profile"],
+    patterns: []
+}
+
+export const adminProtectedRoutes: RouteConfig = {
+    patterns: [/^\/admin/],
+    exact: []
+}
+
+export const shopManagerProtectedRoutes: RouteConfig = {
+    patterns: [/^\/dashboard/],
+    exact: []
+}
+
+export const isAuthRoutes = (pathname: string) => {
+    return authRoutes.some((route: string) => route === pathname);
+}
+
+export const isRouteMatches = (pathname: string, routes: RouteConfig): boolean => {
+    if (routes.exact.includes(pathname)) {
+        return true;
+    }
+    return routes.patterns.some((pattern: RegExp) => pattern.test(pathname))
+}
+
+export const getRouteOwner = (pathname: string): "ADMIN" | "SHOP_MANAGER" | "CUSTOMER" | "COMMON" | null => {
+    if (isRouteMatches(pathname, adminProtectedRoutes)) {
+        return "ADMIN"
+    }
+    if (isRouteMatches(pathname, shopManagerProtectedRoutes)) {
+        return "SHOP_MANAGER"
+    }
+    if (isRouteMatches(pathname, commonProtectedRoutes)) {
+        return "COMMON"
+    }
+    return null;
+}
+
+export const getDefaultDashboardRoute = (role: UserRole): string => {
+    if (role === "ADMIN") {
+        return "/admin/dashboard"
+    }
+    if (role === "SHOP_MANAGER") {
+        return "/dashboard"
+    }
+    if (role === "CUSTOMER") {
+        return "/my-profile"
+    }
+    return "/"
+}
+
+export const isValidRedirectForRole = (redirectPath: string, role: UserRole): boolean => {
+    const routeOwner = getRouteOwner(redirectPath);
+    if (routeOwner === null || routeOwner === "COMMON") {
+        return true;
+    }
+    if (routeOwner === role) {
+        return true;
+    }
+    return false;
+}
+

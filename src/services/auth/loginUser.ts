@@ -3,42 +3,45 @@
 
 import { parse } from "cookie";
 import { cookies } from "next/headers";
-// import { redirect } from "next/navigation";
+import { redirect } from "next/navigation";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import { signInSchema } from "@/zod/user.validation";
 import { setCookie } from "./tokenHandlers";
+import { getDefaultDashboardRoute, isValidRedirectForRole } from "@/lib/auth-utils";
 
-export const loginUser = async (_currentState: any, formData: FormData) => {
+export const loginUser = async (_currentState: any, formData: any): Promise<any> => {
     try {
-        const redirectTo = formData.get("redirect") || null;
+        const redirectTo = formData.get('redirect') || null;
+        console.log(redirectTo);
+
         let accessTokenObject: null | any = null;
         let refreshTokenObject: null | any = null;
         const loginData = {
-            email: formData.get("email"),
-            password: formData.get("password"),
-        };
-
+            email: formData.get('email'),
+            password: formData.get('password')
+        }
         const validatedFields = signInSchema.safeParse(loginData);
-
         if (!validatedFields.success) {
             return {
                 success: false,
-                errors: validatedFields.error.issues.map((issue) => ({
-                    field: issue.path[0],
-                    message: issue.message,
-                })),
-            };
+                errors: validatedFields.error.issues.map(issue => {
+                    return {
+                        field: issue.path[0],
+                        message: issue.message
+                    }
+                })
+            }
         }
-
-        // Call your backend API
-        const res = await fetch(`http://localhost:5000/api/v1/auth/login`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/auth/login`, {
             method: "POST",
             body: JSON.stringify(loginData),
-            headers: { "Content-Type": "application/json" },
+            headers: {
+                "Content-Type": "application/json"
+            },
         });
 
         const result = await res.json();
-        console.log(result);
+
         const setCookieHeaders = res.headers.getSetCookie();
 
         if (setCookieHeaders && setCookieHeaders.length > 0) {
@@ -74,43 +77,58 @@ export const loginUser = async (_currentState: any, formData: FormData) => {
             maxAge: parseInt(accessTokenObject['Max-Age']) || 1000 * 60 * 60 * 24 * 90,
             path: refreshTokenObject.Path || "/",
         });
+        type UserRole = "ADMIN" | "CUSTOMER" | "SHOP_MANAGER";
 
-        // Decode JWT to get user role
+
+        // 1. Wrap the verification in a try-catch block
         let verifiedToken: JwtPayload | null = null;
 
         try {
-            const decoded = jwt.verify(accessTokenObject.accessToken, process.env.JWT_SECRET as string);
-            if (typeof decoded !== "string") verifiedToken = decoded as JwtPayload;
-        } catch (err) {
-            console.log(err);
-            throw new Error("Invalid session token");
+            const decoded = jwt.verify(
+                accessTokenObject.accessToken,
+                process.env.JWT_SECRET as string
+            );
+
+            if (typeof decoded !== "string") {
+                verifiedToken = decoded as JwtPayload;
+            }
+        } catch (error) {
+            console.error("JWT Verification Error inside loginUser:", error);
+            return {
+                success: false,
+                message: "Your session token is invalid. Please try logging in again."
+            };
         }
 
-        // const userRole = verifiedToken?.role as "ADMIN" | "CLIENT";
-        // let redirectPath = getDefaultDashboardRoute(userRole);
+        // 2. Proceed only if verifiedToken exists
+        if (!verifiedToken) {
+            throw new Error("Invalid token structure");
+        }
 
-        // if (redirectTo) {
-        //   const requestedPath = redirectTo.toString();
-        //   if (isValidRedirectForRole(requestedPath, userRole)) redirectPath = requestedPath;
-        // }
+        const userRole = verifiedToken.role as UserRole;
+        // const redirectPath = redirectTo ? redirectTo.toString() : getDefaultDashboardRoute(userRole as UserRole);
+        // redirect(redirectPath);
 
-        // redirect(`${redirectPath}?loggedIn=true`);
-        //  Return success response
-        return {
-            success: true,
-            message: "Login successful",
-            user: verifiedToken,
-            data: result,
-        };
+        if (!result.success) {
+            throw new Error("Login Failed");
+        }
+
+        let redirectPath = getDefaultDashboardRoute(userRole );
+
+        if (redirectTo) {
+            const requestedPath = redirectTo.toString();
+
+            if (isValidRedirectForRole(requestedPath, userRole)) {
+                redirectPath = requestedPath;
+            }
+        }
+        redirect(`${redirectPath}?loggedIn=true`);
     } catch (error: any) {
-        if (error?.digest?.startsWith("NEXT_REDIRECT")) throw error;
-        console.error(error);
-        return {
-            success: false,
-            message:
-                process.env.NODE_ENV === "development"
-                    ? error.message
-                    : "Login failed. Email or password may be incorrect.",
-        };
+        // Re-throw NEXT_REDIRECT errors so Next.js can handle them
+        if (error?.digest?.startsWith('NEXT_REDIRECT')) {
+            throw error;
+        }
+        console.log(error);
+        return { success: false, message: `${process.env.NODE_ENV === 'development' ? error.message : "Login Failed. You might have entered incorrect email or password."}` };
     }
-};
+}

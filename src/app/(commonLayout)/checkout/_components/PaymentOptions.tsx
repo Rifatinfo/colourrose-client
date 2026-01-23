@@ -18,7 +18,7 @@ export function PaymentOptions() {
 
     setIsProcessing(true);
     try {
-      // ✅ real order / payment logic here
+      //  real order / payment logic here
     } catch (err) {
       console.error(err);
     } finally {

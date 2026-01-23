@@ -27,7 +27,6 @@ import { useCart } from "@/context/CartContext";
 import CartButton from "./CartButton";
 import { useCartDrawer } from "@/context/CartDrawerContext";
 import WishlistCount from "./WishlistCount";
-import LoginModal from "@/components/auth-form/LoginModal";
 
 export function Navbar() {
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
@@ -179,10 +178,6 @@ export function Navbar() {
           isHome={isHome}
         />
       </motion.header>
-      {/*================ Login Modal =====================*/}
-      {
-        isLoginModalOpen && <LoginModal isOpen={isLoginModalOpen} onClose={() => setIsLoginModalOpen(false)} />
-      }
       {/*========================= Mobile Menu Overlay =========================*/}
       <AnimatePresence>
         {isMobileMenuOpen && (

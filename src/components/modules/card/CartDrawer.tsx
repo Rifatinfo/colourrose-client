@@ -7,15 +7,12 @@ import { useCart } from '@/context/CartContext';
 import Swal from 'sweetalert2';
 import { useCartDrawer } from '@/context/CartDrawerContext';
 import { useRouter } from 'next/navigation';
-import { isLoggedIn, setPostLoginRedirect } from '@/utils/postLoginRedirect';
-import { useLogin } from '@/context/UIContext';
 import { getImageUrl } from '@/lib/getImageUrl';
 
 
 export function CartDrawer() {
     const { isOpen, closeDrawer, mode } = useCartDrawer();
     const { cart, updateQty, removeItem } = useCart();
-    const { openLoginModal } = useLogin();
 
     const router = useRouter();
     const subtotal = cart.reduce(

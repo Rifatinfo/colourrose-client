@@ -8,7 +8,12 @@ export type RouteConfig = {
 export const authRoutes = ["/login"];
 
 export const commonProtectedRoutes: RouteConfig = {
-    exact: ["/my-profile"],
+    exact: ["change-password", "forgot-password", "reset-password", "settings"],
+    patterns: []
+}
+
+export const customerProtectedRoutes: RouteConfig = {
+    exact: ["/my-profile", "/my-orders", "/checkout"],
     patterns: []
 }
 
@@ -40,6 +45,9 @@ export const getRouteOwner = (pathname: string): "ADMIN" | "SHOP_MANAGER" | "CUS
     if (isRouteMatches(pathname, shopManagerProtectedRoutes)) {
         return "SHOP_MANAGER"
     }
+    if (isRouteMatches(pathname, customerProtectedRoutes)) {
+        return "CUSTOMER"
+    }
     if (isRouteMatches(pathname, commonProtectedRoutes)) {
         return "COMMON"
     }
@@ -61,7 +69,7 @@ export const getDefaultDashboardRoute = (role: UserRole): string => {
 
 export const isValidRedirectForRole = (redirectPath: string, role: UserRole): boolean => {
     const routeOwner = getRouteOwner(redirectPath);
-    if (routeOwner === null || routeOwner === "COMMON") {
+    if (routeOwner === null || routeOwner === "COMMON" ) {
         return true;
     }
     if (routeOwner === role) {

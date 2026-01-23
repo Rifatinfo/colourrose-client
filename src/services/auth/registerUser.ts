@@ -12,8 +12,6 @@ export const registerClient = async (_currentState: any, formData: FormData): Pr
             name: formData.get("name"),
             email: formData.get("email"),
             password: formData.get("password"),
-            confirmPassword: formData.get("confirmPassword"),
-            terms: formData.get("terms") === "true",
         };
 
         if (zodValidator(payload, signUpSchema).success === false) {
@@ -29,11 +27,8 @@ export const registerClient = async (_currentState: any, formData: FormData): Pr
         const newFormData = new FormData();
         newFormData.append("data", JSON.stringify(registerData));
 
-        if (formData.get("file")) {
-            newFormData.append("file", formData.get("file") as Blob);
-        }
-
-        const res = await fetch(`http://localhost:5000/api/v1/user/create`, {
+        
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/user/create`, {
             method: "POST",
             body: newFormData, // FormData
         });

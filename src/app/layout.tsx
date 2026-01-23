@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
-// import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Providers } from "./providers";
 import CartDrawerClient from "@/components/modules/card/CartDrawerClient";
-import GlobalLoginModal from "@/components/shared/GlobalLoginModal/GlobalLoginModal";
-
+import { Suspense } from "react";
+import LoginSuccessToast from "@/components/modules/AuthLogin/LoginSuccessToast";
+import LogoutSuccessToast from "@/components/modules/AuthLogin/LogoutSuccessToast";
 
 export const metadata: Metadata = {
   title: "Colourrose",
@@ -21,13 +21,13 @@ export default function RootLayout({
       <body>
         <Providers>
           {children}
-          <GlobalLoginModal />
-          <CartDrawerClient/>
+          <CartDrawerClient />
         </Providers>
+        <Suspense fallback={null}>
+          <LoginSuccessToast />
+          <LogoutSuccessToast />
+        </Suspense>
       </body>
     </html>
   );
 }
-
-
-

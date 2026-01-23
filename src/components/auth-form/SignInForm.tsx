@@ -13,9 +13,8 @@ import { loginUser } from "@/services/auth/loginUser"; // your server action
 import { Toast } from "../shared/Toast/Toast";
 import { Button } from "../ui/button";
 import { usePathname } from "next/navigation";
-import { useLogin } from "@/context/UIContext";
 import { useRouter } from "next/navigation";
-import { clearPostLoginRedirect, getPostLoginRedirect } from "@/utils/postLoginRedirect";
+
 
 type SignInFormValues = z.infer<typeof signInSchema>;
 
@@ -26,7 +25,6 @@ const LoginForm = ({ onClose }: { onClose: () => void }) => {
     const pathname = usePathname();
 
 
-    const { closeLoginModal } = useLogin();
     const router = useRouter();
 
 
@@ -68,13 +66,6 @@ const LoginForm = ({ onClose }: { onClose: () => void }) => {
                     title: "Login successful!",
                 });
 
-                // Close global login modal
-                closeLoginModal();
-
-                // Redirect after login
-                const redirect = getPostLoginRedirect() || "/checkout";
-                clearPostLoginRedirect();
-                router.replace(redirect);
 
                 // Optional: close local drawer/modal
                 onClose();
@@ -138,7 +129,7 @@ const LoginForm = ({ onClose }: { onClose: () => void }) => {
                     onClick={() => {
                         // send current page path to backend
                         window.location.href =
-                            `http://localhost:5000/api/v1/auth/google/callback?redirect=${encodeURIComponent(
+                            `${process.env.NEXT_PUBLIC_API_URL}/api/v1/auth/google/callback?redirect=${encodeURIComponent(
                                 pathname
                             )}`;
                     }}

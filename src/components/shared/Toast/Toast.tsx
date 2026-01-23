@@ -2,7 +2,7 @@
 
 export const Toast = Swal.mixin({
   toast: true,
-  position: "top-end",
+  position: "top",
   showConfirmButton: false,
   timer: 3000,
   timerProgressBar: true,
@@ -15,3 +15,6 @@ export const Toast = Swal.mixin({
     toast.onmouseleave = Swal.resumeTimer;
   },
 });
+
+
+

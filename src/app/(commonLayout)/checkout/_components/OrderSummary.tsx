@@ -4,7 +4,7 @@ import { useSyncExternalStore } from "react";
 // import OrderItemCount from "./OrderItemCount";
 
 type Props = {
-  selectedDelivery: string;
+  selectedDelivery: string | null; // selected option id
 };
 
 export function OrderSummary({ selectedDelivery }: Props) {

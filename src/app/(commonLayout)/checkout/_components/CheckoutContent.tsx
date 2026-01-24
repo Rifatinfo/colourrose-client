@@ -1,14 +1,16 @@
 "use client";
 import { useState } from "react";
-import { DeliveryAddressForm } from "./DeliveryAddressForm";
+import DeliveryAddressForm from "./DeliveryAddressForm";
 import { DeliveryOptions } from "./DeliveryOptions";
 import { OrderSummary } from "./OrderSummary";
 import { PaymentOptions } from "./PaymentOptions";
 import { ShoppingCart } from "./ShoppingCart";
+import { useCheckout } from "@/hooks/useCheckout";
 
 const CheckoutContent = () => {
-  const [delivery, setDelivery] = useState("inside_dhaka");
-
+// const [delivery, setDelivery] = useState<string | null>(null); // store id
+  const checkout = useCheckout();
+  
   return (
     <div>
       <main className="px-4 py-6">
@@ -20,14 +22,15 @@ const CheckoutContent = () => {
           {/* Left Column (Cart, Delivery, Summary) */}
           <div className="lg:col-span-7 xl:col-span-6">
             <ShoppingCart />
-            <DeliveryOptions selected={delivery} onChange={setDelivery} />
-            <OrderSummary selectedDelivery={delivery} />
+            <DeliveryOptions selected={checkout.delivery} onChange={checkout.setDelivery} />
+            <OrderSummary selectedDelivery={checkout.delivery} />
           </div>
 
           {/* Right Column (Address, Payment) */}
           <div className="lg:col-span-5 xl:col-span-6">
-            <DeliveryAddressForm />
-            <PaymentOptions />
+            <DeliveryAddressForm  address={checkout.address}
+            setAddress={checkout.setAddress} />
+            <PaymentOptions checkout={checkout} />
           </div>
         </div>
       </main>

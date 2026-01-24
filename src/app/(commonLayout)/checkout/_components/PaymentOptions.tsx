@@ -1,26 +1,132 @@
 "use client";
-import { useState } from "react";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { Toast } from "@/components/shared/Toast/Toast";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { useCart } from "@/context/CartContext";
+import { createOrder } from "@/services/order/order.api";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import Swal from "sweetalert2";
 
-type PaymentMethod = "online" | "cod";
+interface CartItem {
+  productId: string;
+  quantity: number;
+  color: string;
+  size: string;
+}
 
-export function PaymentOptions() {
-  const [payment, setPayment] = useState<PaymentMethod | null>(null);
+interface Address {
+  name: string;
+  phone: string;
+  state?: string;
+  address: string;
+}
+
+interface Checkout {
+  cart: CartItem[];
+  delivery: string | null;
+  payment: "online" | "cod" | null;
+  address: Address;
+  setPayment: (v: "online" | "cod") => void;
+}
+
+export function PaymentOptions({ checkout }: { checkout: Checkout }) {
+  const { cart, removeItem } = useCart();
   const [isProcessing, setIsProcessing] = useState(false);
   const [agreed, setAgreed] = useState(false);
-
+  const router = useRouter();
 
   const handleProceed = async () => {
-   
+    // ======== VALIDATIONS ======== //
+    if (!checkout.delivery) {
+      Swal.fire({ icon: "warning", title: "Select delivery option" });
+      return;
+    }
+
+    if (!checkout.address?.name) {
+      Swal.fire({ icon: "warning", title: "Fill delivery address" });
+      return;
+    }
+    if (!checkout.address?.phone) {
+      Swal.fire({ icon: "warning", title: "Fill delivery phone" });
+      return;
+    }
+
+    if (!checkout.payment) {
+      Swal.fire({ icon: "warning", title: "Select payment method" });
+      return;
+    }
+
+    if (!checkout.cart || checkout.cart.length === 0) {
+      Swal.fire({ icon: "warning", title: "Your cart is empty" });
+      return;
+    }
+
+    if (!agreed) {
+      Swal.fire({
+        icon: "warning",
+        title: "You must agree to Terms & Conditions",
+      });
+      return;
+    }
 
     setIsProcessing(true);
+
     try {
-      //  real order / payment logic here
-    } catch (err) {
-      console.error(err);
+      // ======== MAP PAYLOAD FOR BACKEND ======== //
+      const payload = {
+        deliveryInfo: {
+          name: checkout.address.name,
+          phone: checkout.address.phone,
+          state: checkout.address.state || "",
+          address: checkout.address.address,
+        },
+        deliveryType:
+          checkout.delivery === "inside" ? "inside_dhaka" : "outside_dhaka",
+        cartItems: checkout.cart.map((item) => {
+          if (!item.productId || !item.quantity) {
+            throw new Error("Invalid cart item: " + JSON.stringify(item));
+          }
+          return {
+            productId: item.productId,
+            quantity: item.quantity,
+            color: item.color,
+            size: item.size,
+          };
+        }),
+        paymentMethod: checkout.payment.toUpperCase(),
+      };
+
+      // ======== CALL BACKEND API ======== //
+      const order = await createOrder(payload);
+
+      // ======== HANDLE SUCCESS ======== //
+      if (checkout.payment === "cod") {
+        //================ Clear the cart =============//
+        cart.forEach((item) =>
+          removeItem(item.productId, item.color, item.size),
+        );
+      Toast.fire({ icon: "success", title: "Order placed successfully" });
+        router.push("/order-success");
+      } else if (checkout.payment === "online") {
+        if (order.data.paymentUrl) {
+          window.location.href = order.data.paymentUrl;
+        } else {
+          Toast.fire({
+            icon: "success",
+            title: "Order created. Proceed to payment.",
+          });
+        }
+      }
+    } catch (err: any) {
+      console.error("Checkout Error:", err.message || err);
+      Toast.fire({
+        icon: "error",
+        title: err.message || "Checkout failed",
+      });
     } finally {
       setIsProcessing(false);
     }
@@ -54,8 +160,8 @@ export function PaymentOptions() {
         <div>
           <p className="mb-2 font-semibold text-sm">Payment Method</p>
           <RadioGroup
-            value={payment ?? ""}
-            onValueChange={(v) => setPayment(v as PaymentMethod)}
+            value={checkout.payment ?? ""}
+            onValueChange={(v) => checkout.setPayment(v as "online" | "cod")}
             className="space-y-3"
           >
             <Label className="flex items-center gap-3 border p-4 cursor-pointer">
@@ -69,7 +175,6 @@ export function PaymentOptions() {
             </Label>
           </RadioGroup>
         </div>
-
 
         {/* Proceed Button */}
         <button
@@ -99,7 +204,6 @@ export function PaymentOptions() {
               />
             </svg>
           )}
-
           {isProcessing ? "Processing..." : "Proceed to Order"}
         </button>
       </CardContent>

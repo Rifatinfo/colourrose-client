@@ -47,14 +47,11 @@ export function ShoppingCart() {
       <div className="space-y-4">
 
         {cart.map((item) => (
-          console.log(`item image`, item.image),
-          console.log("CART ITEMS", `${process.env.NEXT_PUBLIC_API_URL}${item.image}`),
-          console.log("CART ITEM IMAGE URL", getImageUrl(item.image)),
           <div
             key={`${item.productId}-${item.color}-${item.size}`}
-            className="group relative overflow-hidden shadow-2xl bg-white/80 backdrop-blur-xl p-5 transition-all duration-300  hover:shadow-xl"
+            className="group relative overflow-hidden shadow-2xl bg-white/80 backdrop-blur-xl md:p-5 p-2 transition-all duration-300  hover:shadow-xl"
           >
-            <div className="flex gap-5">
+            <div className="flex md:gap-5 gap-2">
               {/* Image */}
               <div className="w-24 h-28  overflow-hidden bg-gray-100 flex-shrink-0">
                 <Image

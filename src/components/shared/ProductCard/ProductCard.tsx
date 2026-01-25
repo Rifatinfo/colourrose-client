@@ -44,8 +44,14 @@ export function ProductCard({
 }) {
     const [isHovered, setIsHovered] = useState(false)
     // =============  Determine if product is sold (out of stock) =============//
-    const isSold = product.stockQuantity !== undefined ? product.stockQuantity <= 0 : product.sold || false;
-
+    // const isSold = product.stockQuantity !== undefined ? product.stockQuantity <= 0 : product.sold || false;
+    let isSold = true;
+    for(const variant of product.variants) {
+        if(variant.quantity > 0){
+            isSold = false;
+            break;
+        }
+    }
     // ============= Extract unique sizes and colors from variants =============//
     const sizes: string[] = product.variants
         ? Array.from(new Set(product.variants.map((v: any) => v.size)))
@@ -77,12 +83,6 @@ export function ProductCard({
                             : 'aspect-[4/5] md:h-[520px] lg:h-[850px]'
                             }`}
                     >
-                        {/* <Image
-                        fill
-                         src={product.images && product.images.length > 0 ? product.images[0].url : "/placeholder.png"}
-                        alt={product.name}
-                        className="h-full w-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105"
-                    /> */}
                         <Image
                             fill
                             // src={getImageUrl(product.images?.[0]?.url)}
@@ -92,19 +92,10 @@ export function ProductCard({
                              unoptimized
                         />
 
-                        {/* Badges */}
-                        {/* {product.badge && (
-                        <div className="absolute top-4 left-4">
-                            <span className="bg-white/90 backdrop-blur-sm px-3 py-1 text-xs font-bold uppercase tracking-wider text-black">
-                                {product.badge}
-                            </span>
-                        </div>
-                    )} */}
-
                         {/* Sold Badge (top-left black) */}
                         {isSold && (
-                            <div className="absolute top-4 left-4">
-                                <span className="bg-black px-3 py-1 text-xs font-bold uppercase text-white">
+                            <div className="absolute">
+                                <span className="bg-black px-4 py-2 text-xs font-bold uppercase text-white">
                                     Sold
                                 </span>
                             </div>
@@ -161,9 +152,8 @@ export function ProductCard({
                                         {/* Add to Bag */}
                                         <button
                                             disabled={isSold} // disable if sold
-                                            // className="cursor-pointer w-full bg-black text-white py-3 text-sm font-bold uppercase tracking-widest hover:bg-neutral-800 transition-colors flex items-center justify-center gap-2 mt-1">
                                             className={`cursor-pointer w-full py-3 text-sm font-bold uppercase tracking-widest flex items-center justify-center gap-2 mt-1 transition-colors ${isSold
-                                                ? "bg-gray-400 text-white cursor-not-allowed"
+                                                ? "text-red-500 bg-black cursor-not-allowed"
                                                 : "bg-black text-white hover:bg-neutral-800"
                                                 }`} >
                                             <ShoppingBag className="w-4 h-4" />
@@ -186,14 +176,14 @@ export function ProductCard({
                                         : "UNCATEGORIZED"}
                                 </p> */}
 
-                                    <h3 className="text-lg font-medium leading-tight text-white">
+                                    <h3 className="md:text-xl text-lg font-medium leading-tight text-white">
                                         {product.name}
                                     </h3>
                                 </div>
                             </div>
 
                             <div className="flex justify-between items-center mt-2">
-                                <span className="text-base font-semibold text-white">{product.salePrice} TK
+                                <span className="md:text-lg text-base font-semibold text-white">{product.salePrice} TK
                                 </span>
                             </div>
                         </div>

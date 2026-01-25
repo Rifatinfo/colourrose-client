@@ -5,13 +5,7 @@ import { motion, } from 'framer-motion'
 
 
 
-const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/product`,
-    { cache: "no-store" }
-);
 
-const json = await res.json();
-const products = json.data;
 
 
 const container = {
@@ -25,11 +19,11 @@ const container = {
         },
     },
 }
-export function BestSellersSection() {
+export function BestSellersSection({ products }: { products: any[] }) {
     return (
         <section>
             <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3">
-                {products.slice(0, 3).map((product : any, index : number) => (
+                {products.slice(0, 3).map((product : any) => (
                     <motion.div
                         key={product.id}
                         variants={container}
@@ -40,7 +34,7 @@ export function BestSellersSection() {
                             margin: '-100px',
                         }}
                     >
-                        <ProductCard product={product} category={product.category || 'General'} />
+                        <ProductCard product={product} category={product.category?.[0]?.categoryId || 'General'} />
                     </motion.div>
                 ))}
 

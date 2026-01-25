@@ -44,14 +44,11 @@ export function ProductCard({
 }) {
     const [isHovered, setIsHovered] = useState(false)
     // =============  Determine if product is sold (out of stock) =============//
-    // const isSold = product.stockQuantity !== undefined ? product.stockQuantity <= 0 : product.sold || false;
-    let isSold = true;
-    for(const variant of product.variants) {
-        if(variant.quantity > 0){
-            isSold = false;
-            break;
-        }
-    }
+    const isSold =
+        Array.isArray(product.variants) &&
+        product.variants.length > 0 &&
+        product.variants.every((variant: any) => variant.quantity <= 0);
+        
     // ============= Extract unique sizes and colors from variants =============//
     const sizes: string[] = product.variants
         ? Array.from(new Set(product.variants.map((v: any) => v.size)))
@@ -86,21 +83,20 @@ export function ProductCard({
                         <Image
                             fill
                             // src={getImageUrl(product.images?.[0]?.url)}
-                             src={`${process.env.NEXT_PUBLIC_API_URL}${product.images[0].url}`}
-                             alt={product.name}
-                             className="h-full w-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105"
-                             unoptimized
+                            src={`${process.env.NEXT_PUBLIC_API_URL}${product.images[0].url}`}
+                            alt={product.name}
+                            className="h-full w-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105"
+                            unoptimized
                         />
 
                         {/* Sold Badge (top-left black) */}
                         {isSold && (
-                            <div className="absolute">
+                            <div className="absolute top-4 left-4">
                                 <span className="bg-black px-4 py-2 text-xs font-bold uppercase text-white">
                                     Sold
                                 </span>
                             </div>
                         )}
-
 
                         {/*====================== Wishlist Button ====================*/}
                         <WishlistIconButton product={product} />

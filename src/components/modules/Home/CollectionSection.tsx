@@ -21,7 +21,7 @@ export function CollectionSection() {
                     transition={{
                         duration: 0.8,
                     }}
-                    className="relative h-[420px] lg:h-[550px] w-full aspect-square  overflow-hidden group cursor-pointer funnel-display"
+                    className="relative h-[420px] lg:h-[680px] w-full aspect-square  overflow-hidden group cursor-pointer funnel-display"
                 >
                     <Image
                         fill

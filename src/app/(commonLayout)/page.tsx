@@ -7,7 +7,7 @@ const HomePage = async () => {
 
     const res = fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/api/v1/product/best-selling`,
-        { cache: "no-store" }
+        { cache: 'no-store'}
     )
     .then((res) => res.json());
 

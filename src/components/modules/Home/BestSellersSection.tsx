@@ -5,9 +5,6 @@ import { motion, } from 'framer-motion'
 
 
 
-
-
-
 const container = {
     hidden: {
         opacity: 0,
@@ -23,7 +20,7 @@ export function BestSellersSection({ products }: { products: any[] }) {
     return (
         <section>
             <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3">
-                {products.slice(0, 3).map((product : any) => (
+                {products.map((product : any) => (
                     <motion.div
                         key={product.id}
                         variants={container}
